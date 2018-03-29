@@ -14,32 +14,32 @@ export default class ApplicationLayout extends React.Component {
         var links_list=
         
         <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Charts">
+            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Dashboard">
               <a className="nav-link mt-2" href="/">
                 <i className="fa fa-fw fa-dashboard"></i>
                 <span className="nav-link-text"> Dashboard</span>
               </a>
             </li>
-            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Tables">
+            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Account">
               <a className="nav-link" href="/account">
                 <i className="fa fa-fw fa-table"></i>
                 <span className="nav-link-text"> Account</span>
               </a>
             </li>
             {false && 'Generated plop links go here'}
-            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Dashboard">
+            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Getting Started">
               <a className="nav-link" href="/gravity">
                 <i className="fa fa-fw fa-question-circle"></i>
                 <span className="nav-link-text"> Getting Started</span>
               </a>
             </li>
-            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Charts">
+            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Gravity Docs">
               <a className="nav-link" href="https://github.com/SigwoTechnologies/jupiter-gravity/wiki" target="_blank">
-                <i className="fa fa-fw fa-area-chart"></i>
+                <i className="fa fa-fw fa-files-o"></i>
                 <span className="nav-link-text"> Gravity Docs</span>
               </a>
             </li>
-            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Tables">
+            <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Contact Us">
               <a className="nav-link" href="/gravity#contact-tab">
                 <i className="fa fa-fw fa-table"></i>
                 <span className="nav-link-text"> Contact Us</span>
@@ -57,7 +57,7 @@ export default class ApplicationLayout extends React.Component {
             <div className="collapse navbar-collapse" id="navbarResponsive">
               {links_list}
               <ul className="navbar-nav sidenav-toggler">
-                <li className="nav-item">
+                <li className="nav-item py-2">
                   <a className="nav-link text-center" id="sidenavToggler">
                     <i className="fa fa-fw fa-angle-left"></i>
                   </a>
@@ -66,10 +66,10 @@ export default class ApplicationLayout extends React.Component {
               <ul className="navbar-nav ml-auto">
               <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle mr-lg-2" id="profileDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i className="fa fa-fw fa-user"></i> My Profile
+                      <i className="fa fa-fw fa-user"></i> {this.props.data.user != null ? this.props.data.user.record.firstname : null}
                   </a>
                   <div className="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-                      <h6 className="dropdown-header">Logged in as: {this.props.data.user != null ? this.props.data.user.record.firstname : null}</h6>
+                      <h6 className="dropdown-header">Version: 1.0.2</h6>
                       <div className="dropdown-divider"></div>
                       <a className="dropdown-item" href="/">
                           My Dashboard
@@ -104,9 +104,9 @@ export default class ApplicationLayout extends React.Component {
             </button>
             <div className="collapse navbar-collapse" id="navbarResponsive">
               <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-                  <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Dashboard">
+                  <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Getting Started">
                     <a className="nav-link" href="/gravity">
-                      <i className="fa fa-fw fa-dashboard"></i>
+                      <i className="fa fa-fw fa-question-circle"></i>
                       <span className="nav-link-text"> Getting Started</span>
                     </a>
                   </li>
@@ -165,7 +165,7 @@ export default class ApplicationLayout extends React.Component {
                     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
                     <link href="css/sb-admin.css" rel="stylesheet" />
                 </head>
-                <body className="sticky-footer bg-dark fixed-nav" id="page-top">
+                <body className="sticky-footer bg-dark fixed-nav sidenav-toggled" id="page-top">
                     <span id="toastrMessages"></span>
                     <div id={this.props.data.dashboard == true ? 'wrapper' : 'unlogged-wrapper'}>
                         {

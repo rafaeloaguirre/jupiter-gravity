@@ -353,8 +353,8 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
   background-color: #868e96;
   border-top-right-radius: 6px;
   border-top-left-radius: 2px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 6px;
   margin: 4px 14px;
   border: outset gray 2px;
 }
