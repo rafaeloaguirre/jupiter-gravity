@@ -119,15 +119,11 @@ export default class ApplicationLayout extends React.Component {
                 </li>
               </ul>
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <a className="nav-link" href="/signup">
-                    Sign up
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/login">
-                    <i className="fa fa-fw fa-sign-in"></i >Log in
-                  </a>
+                <li className="mx-auto">
+                  <div className="nav-item btn-group my-2" role="group">
+                    <a className="btn btn-secondary text-light nav-link p-2" href="/signup"> Sign Up </a>
+                    <a className="btn btn-secondary text-light nav-link p-2" href="/login"><i className="fa fa-fw fa-sign-in"></i> Login</a>
+                  </div>
                 </li>
               </ul>
             </div>

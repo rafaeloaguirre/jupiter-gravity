@@ -8,30 +8,30 @@
   .navbar-collapse {
     .navbar-sidenav {
       .nav-link-collapse:after {
-        color: $gray-600;
+        color: $gray-100;
       }
       > .nav-item {
         > .nav-link {
-          color: $gray-800;
+          color: $gray-100;
           background-color: $gray-600;
-          border-top-right-radius: 6px;
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-          border-bottom-right-radius: 6px;
+          border-top-right-radius: 4px;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          border-bottom-right-radius: 8px;
           margin: 4px 14px;
           border: outset gray 2px;
           &:hover {
-            color: $gray-800;
+            color: $gray-100;
             background-color: $gray-500;
           }
         }
         .sidenav-second-level,
         .sidenav-third-level {
           > li > a {
-            color: $gray-600;
+            color: $gray-100;
             &:focus,
             &:hover {
-              color: $gray-500;
+              color: $gray-100;
             }
           }
         }
