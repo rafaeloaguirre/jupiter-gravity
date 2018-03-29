@@ -8,9 +8,10 @@
       }
       > .nav-item {
         > .nav-link {
-          color: $gray-400;
+          color: $gray-800;
+          background-color: $gray-500;
           &:hover {
-            color: $gray-300;
+            color: $gray-800;
             background-color: $gray-600;
           }
         }
@@ -33,7 +34,7 @@
   @media (min-width: 992px) {
     .navbar-collapse {
       .navbar-sidenav {
-        background: $gray-700;
+        background: $gray-400;
         li {
           &.active {
             a {
