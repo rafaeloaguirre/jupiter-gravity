@@ -48,7 +48,7 @@ export default class ApplicationLayout extends React.Component {
         </ul>
 
         var logged_header=
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <nav className="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <a className="navbar-brand" href="#"><img className="img" src="../img/sigwo-sheild2.png" height="48px" width="auto" /> Sigwo Technologies</a>
             <a className="nav-link bg-secondary p-2 rounded text-light" href="#">{this.props.data.user != null ? this.props.data.user.record.account : null}</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@ export default class ApplicationLayout extends React.Component {
         </nav>
 
         var unlogged_header=
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <nav className="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <a className="navbar-brand" href="#"><img className="img" src="../img/sigwo-sheild2.png" height="48px" width="auto" /> Sigwo Technologies</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
@@ -137,7 +137,7 @@ export default class ApplicationLayout extends React.Component {
         <div className="content-wrapper">
           <div className="container">
             {this.props.children}
-          </div> 
+          </div>
         </div>
         
 
@@ -165,7 +165,7 @@ export default class ApplicationLayout extends React.Component {
                     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet" />
                     <link href="css/sb-admin.css" rel="stylesheet" />
                 </head>
-                <body className="sticky-footer bg-dark fixed-nav sidenav-toggled" id="page-top">
+                <body className="sticky-footer fixed-nav" id="page-top">
                     <span id="toastrMessages"></span>
                     <div id={this.props.data.dashboard == true ? 'wrapper' : 'unlogged-wrapper'}>
                         {

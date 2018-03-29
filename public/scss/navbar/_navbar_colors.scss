@@ -1,5 +1,9 @@
 // Color support for .navbar-dark
 
+#mainnav {
+  background-color: rgba(46, 57, 68, 0.501);
+}
+
 #mainNav.navbar-dark {
   .navbar-collapse {
     .navbar-sidenav {
@@ -40,7 +44,6 @@
   @media (min-width: 992px) {
     .navbar-collapse {
       .navbar-sidenav {
-        background: $sigwo;
         li {
           &.active {
             a {

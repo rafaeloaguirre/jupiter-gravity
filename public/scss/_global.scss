@@ -7,6 +7,8 @@ html {
 
 body {
   overflow-x: hidden;
+  background:linear-gradient(0deg,rgba(255, 255, 255, 0.6),rgba(0, 0, 0, 0.8)),url(../img/background.jpg);
+  background-size: cover;
 }
 
 body.sticky-footer {

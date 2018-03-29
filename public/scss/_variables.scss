@@ -25,10 +25,6 @@ $cyan: #17a2b8 !default;
 
 $sigwo: #2E3944;
 
-.navbar-dark {
-    background-color: #2E3944!important;
-}
-
 .btn-primary {
     color: #fff;
     background-color: #2E3944!important;
@@ -37,9 +33,9 @@ $sigwo: #2E3944;
 
 // Spacing Variables
 // Change below variable if the height of the navbar changes
-$navbar-base-height: 56px;
+$navbar-base-height: 66px;
 // Change below variable to change the width of the sidenav
-$sidenav-base-width: 250px;
+$sidenav-base-width: 230px;
 // Change below variable to change the width of the sidenav when collapsed
 $sidenav-collapsed-width: 55px;
 // Change below variable to change the height of the sticky footer

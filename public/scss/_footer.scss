@@ -6,7 +6,8 @@ footer.sticky-footer {
   width: 100%;
   height: $sticky-footer-height;
 
-  background-color: $gray-200;
+  color: white;
+  background-color: rgba(46, 57, 68, 0.303);
 
   line-height: 55px;
   @media (min-width: 992px) {

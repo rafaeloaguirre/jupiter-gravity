@@ -1,9 +1,11 @@
 .content-wrapper {
   overflow-x: hidden;
-
-  background: white;
+  color: white;
   @media (min-width: 992px) {
     margin-left: $sidenav-base-width;
+  }
+  .card {
+    color: black;
   }
 }
 
