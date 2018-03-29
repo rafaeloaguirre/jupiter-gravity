@@ -14,14 +14,8 @@ export default class ApplicationLayout extends React.Component {
         var links_list=
         
         <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <li className="nav-item p-2 bg-secondary rounded">
-              <div className="text-center">
-                <h4 className="text-white">Account ID</h4>
-                <a className="nav-link small" href="#">{this.props.data.user != null ? this.props.data.user.record.account : null}</a>
-              </div>
-            </li>
             <li className="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Charts">
-              <a className="nav-link" href="/">
+              <a className="nav-link mt-2" href="/">
                 <i className="fa fa-fw fa-dashboard"></i>
                 <span className="nav-link-text"> Dashboard</span>
               </a>
@@ -56,6 +50,7 @@ export default class ApplicationLayout extends React.Component {
         var logged_header=
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
             <a className="navbar-brand" href="#"><img className="img" src="../img/sigwo-sheild2.png" height="48px" width="auto" /> Sigwo Technologies</a>
+            <a className="nav-link bg-secondary p-2 rounded text-light" href="#">{this.props.data.user != null ? this.props.data.user.record.account : null}</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>

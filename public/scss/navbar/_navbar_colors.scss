@@ -9,10 +9,16 @@
       > .nav-item {
         > .nav-link {
           color: $gray-800;
-          background-color: $gray-500;
+          background-color: $gray-600;
+          border-top-right-radius: 6px;
+          border-top-left-radius: 2px;
+          border-bottom-left-radius: 6px;
+          border-bottom-right-radius: 2px;
+          margin: 4px 14px;
+          border: outset gray 2px;
           &:hover {
             color: $gray-800;
-            background-color: $gray-600;
+            background-color: $gray-500;
           }
         }
         .sidenav-second-level,
@@ -34,7 +40,7 @@
   @media (min-width: 992px) {
     .navbar-collapse {
       .navbar-sidenav {
-        background: $gray-400;
+        background: $sigwo;
         li {
           &.active {
             a {

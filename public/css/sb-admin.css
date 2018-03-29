@@ -35,7 +35,7 @@ body.fixed-nav {
 
 .content-wrapper {
   min-height: calc(100vh - 56px);
-  padding-top: 1rem;
+  padding-top: 3rem;
 }
 
 .scroll-to-top {
@@ -350,12 +350,18 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
 
 #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item > .nav-link {
   color: #343a40;
-  background-color: #adb5bd;
+  background-color: #868e96;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 2px;
+  margin: 4px 14px;
+  border: outset gray 2px;
 }
 
 #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item > .nav-link:hover {
   color: #343a40;
-  background-color: #868e96;
+  background-color: #adb5bd;
 }
 
 #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level > li > a,
@@ -375,7 +381,7 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
 
 @media (min-width: 992px) {
   #mainNav.navbar-dark .navbar-collapse .navbar-sidenav {
-    background: #ced4da;
+    background: #2E3944;
   }
   #mainNav.navbar-dark .navbar-collapse .navbar-sidenav li.active a {
     color: white !important;
