@@ -117,7 +117,7 @@ export default class ApplicationLayout extends React.Component {
                   </li>
               </ul>
               <ul className="navbar-nav sidenav-toggler">
-                <li className="nav-item">
+                <li className="nav-item py-2">
                   <a className="nav-link text-center" id="sidenavToggler">
                     <i className="fa fa-fw fa-angle-left"></i>
                   </a>
