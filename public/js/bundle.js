@@ -13121,13 +13121,31 @@ module.exports = factory(isValidElement);
 
 
 
-var emptyFunction = __webpack_require__(13);
-var invariant = __webpack_require__(1);
-var warning = __webpack_require__(2);
 var assign = __webpack_require__(4);
 
 var ReactPropTypesSecret = __webpack_require__(65);
 var checkPropTypes = __webpack_require__(113);
+
+var printWarning = function() {};
+
+if (process.env.NODE_ENV !== 'production') {
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+}
+
+function emptyFunctionThatReturnsNull() {
+  return null;
+}
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -13271,12 +13289,13 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
       if (secret !== ReactPropTypesSecret) {
         if (throwOnDirectAccess) {
           // New behavior only for users of `prop-types` package
-          invariant(
-            false,
+          var err = new Error(
             'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
             'Use `PropTypes.checkPropTypes()` to call them. ' +
             'Read more at http://fb.me/use-check-prop-types'
           );
+          err.name = 'Invariant Violation';
+          throw err;
         } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
@@ -13285,15 +13304,12 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
             // Avoid spamming the console because they are often not actionable except for lib authors
             manualPropTypeWarningCount < 3
           ) {
-            warning(
-              false,
+            printWarning(
               'You are manually calling a React.PropTypes validation ' +
-              'function for the `%s` prop on `%s`. This is deprecated ' +
+              'function for the `' + propFullName + '` prop on `' + componentName  + '`. This is deprecated ' +
               'and will throw in the standalone `prop-types` package. ' +
               'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
-              propFullName,
-              componentName
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
             );
             manualPropTypeCallCache[cacheKey] = true;
             manualPropTypeWarningCount++;
@@ -13337,7 +13353,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   }
 
   function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
+    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
   }
 
   function createArrayOfTypeChecker(typeChecker) {
@@ -13387,8 +13403,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createEnumTypeChecker(expectedValues) {
     if (!Array.isArray(expectedValues)) {
-      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-      return emptyFunction.thatReturnsNull;
+      process.env.NODE_ENV !== 'production' ? printWarning('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
     }
 
     function validate(props, propName, componentName, location, propFullName) {
@@ -13430,21 +13446,18 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createUnionTypeChecker(arrayOfTypeCheckers) {
     if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunction.thatReturnsNull;
+      process.env.NODE_ENV !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
     }
 
     for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
       var checker = arrayOfTypeCheckers[i];
       if (typeof checker !== 'function') {
-        warning(
-          false,
+        printWarning(
           'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received %s at index %s.',
-          getPostfixForTypeWarning(checker),
-          i
+          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
         );
-        return emptyFunction.thatReturnsNull;
+        return emptyFunctionThatReturnsNull;
       }
     }
 
@@ -13671,11 +13684,24 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 
+var printWarning = function() {};
+
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(1);
-  var warning = __webpack_require__(2);
   var ReactPropTypesSecret = __webpack_require__(65);
   var loggedTypeFailures = {};
+
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
 }
 
 /**
@@ -13700,12 +13726,29 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
         try {
           // This is intentionally an invariant that gets caught. It's the same
           // behavior as without this statement except with a better message.
-          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
+          if (typeof typeSpecs[typeSpecName] !== 'function') {
+            var err = Error(
+              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.'
+            );
+            err.name = 'Invariant Violation';
+            throw err;
+          }
           error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
         } catch (ex) {
           error = ex;
         }
-        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+        if (error && !(error instanceof Error)) {
+          printWarning(
+            (componentName || 'React class') + ': type specification of ' +
+            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+            'You may have forgotten to pass an argument to the type checker ' +
+            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+            'shape all require an argument).'
+          )
+
+        }
         if (error instanceof Error && !(error.message in loggedTypeFailures)) {
           // Only monitor this failure once because there tends to be a lot of the
           // same error.
@@ -13713,7 +13756,9 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
           var stack = getStack ? getStack() : '';
 
-          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+          printWarning(
+            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+          );
         }
       }
     }
@@ -39392,155 +39437,173 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var LoginForm = function (_React$Component) {
-    _inherits(LoginForm, _React$Component);
+  _inherits(LoginForm, _React$Component);
 
-    function LoginForm(props) {
-        _classCallCheck(this, LoginForm);
+  function LoginForm(props) {
+    _classCallCheck(this, LoginForm);
 
-        var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
 
-        _this.state = {
-            jup_passphrase: '',
-            response_message: '',
-            response_type: '',
-            confirmation_page: false,
-            account: '',
-            accounthash: '',
-            public_key: ''
-        };
-        _this.handleChange = _this.handleChange.bind(_this);
-        _this.logIn = _this.logIn.bind(_this);
-        return _this;
+    _this.state = {
+      jup_passphrase: "",
+      response_message: "",
+      response_type: "",
+      confirmation_page: false,
+      account: "",
+      accounthash: "",
+      public_key: ""
+    };
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.logIn = _this.logIn.bind(_this);
+    return _this;
+  }
+
+  _createClass(LoginForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      /*if (this.props.messages != null && this.props.messages.loginMessage != null){
+              this.props.messages.loginMessage.map(function(message){
+                  toastr.error(message);
+              });
+          }*/
     }
+  }, {
+    key: "handleChange",
+    value: function handleChange(event) {
+      this.setState({
+        jup_passphrase: event.target.value
+      });
+    }
+  }, {
+    key: "logIn",
+    value: function logIn(event) {
+      event.preventDefault();
+      //toastr.info('Logging in now!');
+      console.log("Authentication submitted!");
+      var events = __webpack_require__(249);
+      var eventEmitter = new events.EventEmitter();
+      var axios = __webpack_require__(7);
+      var page = this;
+      var accountRS;
 
-    _createClass(LoginForm, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            /*if (this.props.messages != null && this.props.messages.loginMessage != null){
-                this.props.messages.loginMessage.map(function(message){
-                    toastr.error(message);
-                });
-            }*/
+      axios.post("/get_jupiter_account", {
+        jup_passphrase: this.state.jup_passphrase
+      }).then(function (response) {
+        //new_account_created = true;
+        //bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
+        //console.log(response.data) ;
+        if (response.data.success == true) {
+          page.setState({
+            confirmation_page: true,
+            account: response.data.account,
+            accounthash: response.data.accounthash,
+            public_key: response.data.public_key
+          });
+        } else {
+          toastr.error(response.data.message);
         }
-    }, {
-        key: 'handleChange',
-        value: function handleChange(event) {
-            this.setState({
-                jup_passphrase: event.target.value
-            });
-        }
-    }, {
-        key: 'logIn',
-        value: function logIn(event) {
-            event.preventDefault();
-            //toastr.info('Logging in now!');
-            console.log('Authentication submitted!');
-            var events = __webpack_require__(249);
-            var eventEmitter = new events.EventEmitter();
-            var axios = __webpack_require__(7);
-            var page = this;
-            var accountRS;
+      }).catch(function (error) {
+        //console.log(error);
+        toastr.error("There was an error in verifying the passphrase with the blockchain.");
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var confirmation_page = _react2.default.createElement(
+        "form",
+        { action: "/login", method: "post", className: "" },
+        _react2.default.createElement(
+          "div",
+          { className: "form-group text-center" },
+          _react2.default.createElement(
+            "p",
+            null,
+            "You are about to login to the account:"
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "h4" },
+            this.state.account
+          )
+        ),
+        _react2.default.createElement("input", { type: "hidden", name: "account", value: this.state.account }),
+        _react2.default.createElement("input", {
+          type: "hidden",
+          name: "accounthash",
+          value: this.state.accounthash
+        }),
+        _react2.default.createElement("input", { type: "hidden", name: "public_key", value: this.state.public_key }),
+        _react2.default.createElement("input", { type: "hidden", name: "jupkey", value: this.state.jup_passphrase }),
+        _react2.default.createElement("input", {
+          type: "hidden",
+          name: "jup_account_id",
+          value: this.state.jup_account_id
+        }),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "button",
+            { type: "submit", className: "btn btn-primary btn-block" },
+            "Continue"
+          )
+        )
+      );
 
-            axios.post('/get_jupiter_account', {
-                jup_passphrase: this.state.jup_passphrase
-            }).then(function (response) {
-                //new_account_created = true;
-                //bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
-                //console.log(response.data) ;
-                if (response.data.success == true) {
-                    page.setState({
-                        confirmation_page: true,
-                        account: response.data.account,
-                        accounthash: response.data.accounthash,
-                        public_key: response.data.public_key
-                    });
-                } else {
-                    toastr.error(response.data.message);
-                }
-            }).catch(function (error) {
-                //console.log(error);
-                toastr.error('There was an error in verifying the passphrase with the blockchain.');
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var confirmation_page = _react2.default.createElement(
-                'form',
-                { action: '/login', method: 'post', className: '' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group text-center' },
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'You are about to login to the account:'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'h4' },
-                        this.state.account
-                    )
-                ),
-                _react2.default.createElement('input', { type: 'hidden', name: 'account', value: this.state.account }),
-                _react2.default.createElement('input', { type: 'hidden', name: 'accounthash', value: this.state.accounthash }),
-                _react2.default.createElement('input', { type: 'hidden', name: 'public_key', value: this.state.public_key }),
-                _react2.default.createElement('input', { type: 'hidden', name: 'jupkey', value: this.state.jup_passphrase }),
-                _react2.default.createElement('input', { type: 'hidden', name: 'jup_account_id', value: this.state.jup_account_id }),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'button',
-                        { type: 'submit', className: 'btn btn-primary btn-block' },
-                        'Continue'
-                    )
-                )
-            );
+      var login_form = _react2.default.createElement(
+        "form",
+        null,
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "div",
+            { className: "form-label-group" },
+            _react2.default.createElement("input", {
+              type: "password",
+              id: "inputPassphrase",
+              className: "form-control",
+              required: "required",
+              value: this.state.jup_passphrase,
+              onChange: this.handleChange.bind(this),
+              placeholder: "Your Jupiter Passphrase",
+              autoComplete: "current-password"
+            }),
+            _react2.default.createElement(
+              "label",
+              { "for": "inputPassphrase" },
+              "Enter your passphrase"
+            )
+          )
+        ),
+        _react2.default.createElement(
+          "button",
+          {
+            className: "btn btn-primary btn-block",
+            onClick: this.logIn.bind(this)
+          },
+          "Login"
+        )
+      );
+      return _react2.default.createElement(
+        "div",
+        null,
+        this.state.confirmation_page == true ? confirmation_page : login_form
+      );
+    }
+  }]);
 
-            var login_form = _react2.default.createElement(
-                'form',
-                { className: 'form-group' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'label',
-                        { htmlFor: 'inputPassphrase', className: 'h4 text-center' },
-                        'Enter your Passphrase:'
-                    ),
-                    _react2.default.createElement('input', { className: 'form-control', id: 'inputPassphrase', type: 'password', value: this.state.jup_passphrase, onChange: this.handleChange.bind(this), placeholder: 'Your Jupiter Passphrase', autoComplete: 'current-password' })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'button',
-                        { className: 'btn btn-primary btn-block', onClick: this.logIn.bind(this) },
-                        'Login'
-                    )
-                )
-            );
-            return _react2.default.createElement(
-                'div',
-                null,
-                this.state.confirmation_page == true ? confirmation_page : login_form
-            );
-        }
-    }]);
-
-    return LoginForm;
+  return LoginForm;
 }(_react2.default.Component);
 
-;
-
 var LoginExport = function LoginExport() {
-    if (document.getElementById('login-form') != null) {
-        var element = document.getElementById('props');
-        var props = JSON.parse(element.getAttribute('data-props'));
+  if (document.getElementById("login-form") != null) {
+    var element = document.getElementById("props");
+    var props = JSON.parse(element.getAttribute("data-props"));
 
-        (0, _reactDom.render)(_react2.default.createElement(LoginForm, { messages: props.messages, server: props.server }), document.getElementById('login-form'));
-    }
+    (0, _reactDom.render)(_react2.default.createElement(LoginForm, { messages: props.messages, server: props.server }), document.getElementById("login-form"));
+  }
 };
 
 module.exports = LoginExport();
