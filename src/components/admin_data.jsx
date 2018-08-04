@@ -159,7 +159,7 @@ class DataComponent extends React.Component {
     ));
 
     const table_version = (
-      <div className="container-fluid">
+      <div className="container-fluid bg-info">
         <table className="table table-striped">
           <thead>
             <tr>{headers}</tr>

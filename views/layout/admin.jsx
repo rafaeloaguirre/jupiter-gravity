@@ -122,27 +122,18 @@ export default class ApplicationLayout extends React.Component {
           <li className="nav-item active">
             <a className="nav-link" href="/">
               <i className="fa fa-fw fa-dashboard" />
-              <span>Dashboard</span>
+              <span>App Summary</span>
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/profile">
+            <a className="nav-link" href="/admin/tables">
               <i className="fa fa-fw fa-edit" />
               <span>Tables</span>
             </a>
           </li>
         </ul>
         <div id="content-wrapper">
-          <div className="container-fluid">
-            {this.props.children}
-            <footer className="sticky-footer">
-              <div className="container my-auto">
-                <div className="copyright text-center my-auto">
-                  <span>Copyright © 2018 YourBrand</span>
-                </div>
-              </div>
-            </footer>
-          </div>
+          <div className="container-fluid">{this.props.children}</div>
         </div>
       </div>
     );
@@ -152,13 +143,6 @@ export default class ApplicationLayout extends React.Component {
         <div id="content-wrapper">
           <div className="container" id="page-wrapper">
             <div>{this.props.children}</div>
-            <footer className="fixed-bottom py-3 mt-2 bg-dark text-light">
-              <div className="container-fluid">
-                <div className="text-center">
-                  <small>Copyright © Sigwo Technologies 2018</small>
-                </div>
-              </div>
-            </footer>
           </div>
         </div>
       </div>
@@ -212,13 +196,6 @@ export default class ApplicationLayout extends React.Component {
               ? logged_wrapper
               : unlogged_wrapper}
           </div>
-          <footer className="sticky-footer">
-            <div className="container">
-              <div className="text-center">
-                <small>Copyright © Sigwo Technologies 2018</small>
-              </div>
-            </div>
-          </footer>
 
           <div
             className="modal fade show"

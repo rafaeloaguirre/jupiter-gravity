@@ -277,7 +277,7 @@ class AdminComponent extends React.Component {
     ));
 
     return (
-      <div className="container-fluid">
+      <div className="container-fluid bg-warngin">
         <div className="text-center">
           <h1>App Summary</h1>
           <h2>Address: {props.user.record.account}</h2>

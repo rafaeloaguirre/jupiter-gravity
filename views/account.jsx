@@ -1,23 +1,20 @@
-import React from 'react';
-import ReactDom from 'react-dom';
+import React from "react";
+import ReactDom from "react-dom";
 
-import ApplicationLayout from './layout/application';
+import ApplicationLayout from "./layout/application";
 
-class AccountPage extends React.Component{
-    constructor(props){
-        super(props);
-    }
+class AccountPage extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
+    return (
+      <ApplicationLayout data={this.props}>
+        <div id="account-section" />
+      </ApplicationLayout>
+    );
+  }
+}
 
-    render(){
-        return(
-            <ApplicationLayout data={this.props}>
-                <div id="account-section">
-
-                </div>
-            </ApplicationLayout>
-        )
-    }
-};
-
-module.exports= AccountPage;
+module.exports = AccountPage;
