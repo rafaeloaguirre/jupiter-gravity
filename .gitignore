@@ -6,7 +6,6 @@
 
 # Ignore bundler config.
 /.bundle
-public/js/bundle.js
 
 # Ignore package-lock.json because it gets us in trouble
 package-lock.json
@@ -14,6 +13,7 @@ package-lock.json
 
 #Ignore public bundle
 /public/js/bundle.min.js
+/public/js/bundle.js
 
 #Ignore other generated files
 /public/css/

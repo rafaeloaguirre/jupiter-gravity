@@ -349,6 +349,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   text-align: center;
 }
 
+.card-plain {
+  border: none;
+}
+
 :root {
   --input-padding-x: 0.75rem;
   --input-padding-y: 0.75rem;

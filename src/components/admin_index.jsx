@@ -97,48 +97,79 @@ class TableComponent extends React.Component {
     const { table } = state;
     const data = table[state.name];
     return (
-      <div className="row">
-        <h3>{this.state.name}</h3>
-        <div className="">
-          <p>
-            <strong>Address:</strong> {data.address}
-          </p>
-          <p>
-            <strong>Passphrase:</strong>{" "}
-            {state.show_passphrase ? (
-              <span>
-                {data.passphrase}{" "}
+      <div className="">
+        <div className="card">
+          <div className="card-header" id={"heading" + this.state.name}>
+            <div className="row mb-0">
+              <div className="col-3 col-xs-12 text-left">
+                <h6>{this.state.name}</h6>
+              </div>
+              <div className="col-3 col-xs-12 text-left">
+                <h6>{this.state.balance}</h6>
+              </div>
+              <div className="col-3 col-xs-12 text-left">
+                <h6 className="text-danger">Low Balance</h6>
+              </div>
+              <div className="text-right">
                 <button
-                  className="btn btn-danger"
-                  onClick={this.showPassphrase.bind(this)}
+                  className="btn btn-primary"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target={"#collapse-" + this.state.name}
+                  aria-expanded="false"
+                  aria-controls={"collapse-" + this.state.name}
                 >
-                  Hide
+                  + more details
                 </button>
-              </span>
-            ) : (
-              <button
-                className="btn btn-default"
-                onClick={this.showPassphrase.bind(this)}
-              >
-                Show passphrase
-              </button>
-            )}
-          </p>
-          <p>
-            <strong>Public Key:</strong> {data.public_key}
-          </p>
-          <p>
-            <strong>Current balance: </strong>
-            <span
-              className={
-                state.low_balance ? "alert alert-warning" : "alert alert-info"
-              }
-            >
-              {state.balance / 10 ** 8} JUP
-            </span>
-          </p>
+              </div>
+              <div className="collapse" id={"collapse-" + this.state.name}>
+                <div className="card-body">
+                  <div className="text-left">
+                    <p>
+                      <strong>Address:</strong> {data.address}
+                    </p>
+                    <p>
+                      <strong>Passphrase:</strong>{" "}
+                      {state.show_passphrase ? (
+                        <span>
+                          {data.passphrase}{" "}
+                          <button
+                            className="btn btn-danger"
+                            onClick={this.showPassphrase.bind(this)}
+                          >
+                            Hide
+                          </button>
+                        </span>
+                      ) : (
+                        <button
+                          className="btn btn-default"
+                          onClick={this.showPassphrase.bind(this)}
+                        >
+                          Show passphrase
+                        </button>
+                      )}
+                    </p>
+                    <p>
+                      <strong>Public Key:</strong> {data.public_key}
+                    </p>
+                    <p>
+                      <strong>Current balance: </strong>
+                      <span
+                        className={
+                          state.low_balance
+                            ? "alert alert-warning"
+                            : "alert alert-info"
+                        }
+                      >
+                        {state.balance / 10 ** 8} JUP
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <hr />
       </div>
     );
   }
@@ -277,41 +308,72 @@ class AdminComponent extends React.Component {
     ));
 
     return (
-      <div className="container-fluid bg-warngin">
-        <div className="text-center">
-          <h1>App Summary</h1>
-          <h2>Address: {props.user.record.account}</h2>
-          <p>
-            <strong>Current balance: </strong>
-            {state.balances && state.balances.balance
-              ? state.balances.balance / 10 ** 8
-              : 0}{" "}
-            JUP
-          </p>
-          <p>
-            <strong>Required app balance: </strong>
-            {state.balances && state.balances.minAppBalanceAmount
-              ? state.balances.minAppBalanceAmount / 10 ** 8
-              : 0}{" "}
-            JUP
-          </p>
+      <div className="">
+        <div className="card card-plain p-4 my-3">
+          <div className="row">
+            <div className="col-12">
+              <h2 className="text-center my-4">App Summary</h2>
+            </div>
+            <div className="col-12 col-md-6 my-4">
+              <h4>App Address:</h4>
+              <span className="bg-warning rounded h4 p-1">
+                {props.user.record.account}
+              </span>
+            </div>
+            <div className="col-12 col-md-6 text-right my-auto">
+              <p>
+                <strong>Current balance: </strong>
+                {state.balances && state.balances.balance
+                  ? state.balances.balance / 10 ** 8
+                  : 0}{" "}
+                JUP<br />
+                <strong>Required app balance: </strong>
+                {state.balances && state.balances.minAppBalanceAmount
+                  ? state.balances.minAppBalanceAmount / 10 ** 8
+                  : 0}{" "}
+                JUP
+              </p>
+            </div>
+          </div>
         </div>
-        <hr />
-        <div className="container">
-          <h2 className="text-center">Tables</h2>
-          <p className="text-center">
-            <strong>Required Table balance: </strong>
-            {state.balances && state.balances.minTableBalanceAmount
-              ? state.balances.minTableBalanceAmount / 10 ** 8
-              : 0}{" "}
-            JUP
-          </p>
-          <hr />
-          {state.loading ? (
-            <p className="text-center alert alert-info">Loading</p>
-          ) : (
-            tableList
-          )}
+
+        <div className="row">
+          <div className="col-12 col-md-12 col-xs-12">
+            <div className="card mt-2 mb-5">
+              <div className="card-header">
+                <h3>Current App Tables</h3>
+                <h5>
+                  <strong>Required Table balance: </strong>
+                  {state.balances && state.balances.minTableBalanceAmount
+                    ? state.balances.minTableBalanceAmount / 10 ** 8
+                    : 0}{" "}
+                  JUP
+                </h5>
+              </div>
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-3 col-xs-12">
+                    <h5>Name</h5>
+                  </div>
+                  <div className="col-3 col-xs-12">
+                    <h5>Balance</h5>
+                  </div>
+                  <div className="col-3 col-xs-12">
+                    <h5>Notifications</h5>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12">
+                    {state.loading ? (
+                      <p className="text-center alert alert-info">Loading</p>
+                    ) : (
+                      tableList
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
