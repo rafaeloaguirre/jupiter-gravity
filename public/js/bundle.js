@@ -27894,263 +27894,312 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var axios = __webpack_require__(7);
 
 var AccountComponent = function (_React$Component) {
-    _inherits(AccountComponent, _React$Component);
+  _inherits(AccountComponent, _React$Component);
 
-    function AccountComponent(props) {
-        _classCallCheck(this, AccountComponent);
+  function AccountComponent(props) {
+    _classCallCheck(this, AccountComponent);
 
-        var _this = _possibleConstructorReturn(this, (AccountComponent.__proto__ || Object.getPrototypeOf(AccountComponent)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (AccountComponent.__proto__ || Object.getPrototypeOf(AccountComponent)).call(this, props));
 
-        _this.state = {
-            user: _this.props.user,
-            email: _this.props.user.record.email,
-            firstname: _this.props.user.record.firstname,
-            lastname: _this.props.user.record.lastname,
-            account_editing_mode: false,
-            saved_email: _this.props.user.record.email,
-            saved_firstname: _this.props.user.record.firstname,
-            saved_lastname: _this.props.user.record.lastname,
-            submitted: false
-        };
+    _this.state = {
+      user: _this.props.user,
+      email: _this.props.user.record.email,
+      firstname: _this.props.user.record.firstname,
+      lastname: _this.props.user.record.lastname,
+      account_editing_mode: false,
+      saved_email: _this.props.user.record.email,
+      saved_firstname: _this.props.user.record.firstname,
+      saved_lastname: _this.props.user.record.lastname,
+      submitted: false
+    };
 
-        _this.handleChange = _this.handleChange.bind(_this);
-        _this.switch_mode = _this.switch_mode.bind(_this);
-        _this.updateAccountInfo = _this.updateAccountInfo.bind(_this);
-        return _this;
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.switch_mode = _this.switch_mode.bind(_this);
+    _this.updateAccountInfo = _this.updateAccountInfo.bind(_this);
+    return _this;
+  }
+
+  _createClass(AccountComponent, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {}
+  }, {
+    key: "handleChange",
+    value: function handleChange(a_field, event) {
+      if (a_field == "email") {
+        this.setState({ email: event.target.value });
+      } else if (a_field == "firstname") {
+        this.setState({ firstname: event.target.value });
+      } else if (a_field == "lastname") {
+        this.setState({ lastname: event.target.value });
+      }
     }
+  }, {
+    key: "switch_mode",
+    value: function switch_mode(mode_type, event) {
+      event.preventDefault();
+      if (mode_type == "account") {
+        this.setState({ account_editing_mode: !this.state.account_editing_mode });
+      }
+    }
+  }, {
+    key: "updateAccountInfo",
+    value: function updateAccountInfo(event) {
+      event.preventDefault();
+      var page = this;
 
-    _createClass(AccountComponent, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {}
-    }, {
-        key: 'handleChange',
-        value: function handleChange(a_field, event) {
-            if (a_field == 'email') {
-                this.setState({ email: event.target.value });
-            } else if (a_field == 'firstname') {
-                this.setState({ firstname: event.target.value });
-            } else if (a_field == 'lastname') {
-                this.setState({ lastname: event.target.value });
-            }
-        }
-    }, {
-        key: 'switch_mode',
-        value: function switch_mode(mode_type, event) {
-            event.preventDefault();
-            if (mode_type == 'account') {
-                this.setState({ account_editing_mode: !this.state.account_editing_mode });
-            }
-        }
-    }, {
-        key: 'updateAccountInfo',
-        value: function updateAccountInfo(event) {
-            event.preventDefault();
-            var page = this;
+      this.setState({
+        submitted: true
+      });
 
-            this.setState({
-                submitted: true
+      axios.put("/account", {
+        account: {
+          firstname: this.state.firstname,
+          lastname: this.state.lastname,
+          email: this.state.email,
+          api_key: this.props.user.api_key,
+          public_key: this.props.public_key
+        }
+      }).then(function (response) {
+        if (response.data.success == true) {
+          page.setState({
+            account_editing_mode: false,
+            saved_email: page.state.email,
+            saved_firstname: page.state.firstname,
+            saved_lastname: page.state.lastname,
+            submitted: false
+          });
+          toastr.success("It will take a few minutes for the changes to reflect in your end");
+          toastr.success("Account update pushed to the blockchain for approval.");
+        } else {
+          if (response.data.validations != null && response.data.validations.messages != null) {
+            response.data.validations.messages.map(function (message) {
+              toastr.error(message);
             });
-
-            axios.put('/account', {
-                account: {
-                    firstname: this.state.firstname,
-                    lastname: this.state.lastname,
-                    email: this.state.email,
-                    api_key: this.props.user.api_key,
-                    public_key: this.props.public_key
-                }
-            }).then(function (response) {
-                if (response.data.success == true) {
-                    page.setState({
-                        account_editing_mode: false,
-                        saved_email: page.state.email,
-                        saved_firstname: page.state.firstname,
-                        saved_lastname: page.state.lastname,
-                        submitted: false
-                    });
-                    toastr.success('It will take a few minutes for the changes to reflect in your end');
-                    toastr.success('Account update pushed to the blockchain for approval.');
-                } else {
-                    if (response.data.validations != null && response.data.validations.messages != null) {
-                        response.data.validations.messages.map(function (message) {
-                            toastr.error(message);
-                        });
-                    }
-                    toastr.error(response.data.message);
-                }
-            }).catch(function (error) {
-                toastr.error('There was an error');
-            });
+          }
+          toastr.error(response.data.message);
         }
-    }, {
-        key: 'render',
-        value: function render() {
-
-            return _react2.default.createElement(
-                'div',
-                { className: '' },
+      }).catch(function (error) {
+        toastr.error("There was an error");
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        { className: "" },
+        _react2.default.createElement(
+          "h1",
+          { className: "page-title text-center" },
+          "My Account"
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "row" },
+          _react2.default.createElement(
+            "div",
+            { className: "card card-register mx-auto my-4" },
+            _react2.default.createElement(
+              "h3",
+              { className: "card-header bg-dark text-white" },
+              "Account information"
+            ),
+            this.state.account_editing_mode == true ? _react2.default.createElement(
+              "form",
+              { className: "card-body" },
+              _react2.default.createElement(
+                "div",
+                { className: "form-row" },
                 _react2.default.createElement(
-                    'h1',
-                    { className: 'page-title text-center' },
-                    'My Account'
+                  "div",
+                  { className: "form-group" },
+                  _react2.default.createElement(
+                    "div",
+                    { className: "col-md-6 col-lg-6 p-3" },
+                    _react2.default.createElement(
+                      "label",
+                      { htmlFor: "inputFirstName" },
+                      "First Name"
+                    ),
+                    _react2.default.createElement("input", {
+                      value: this.state.firstname,
+                      onChange: this.handleChange.bind(this, "firstname"),
+                      type: "name",
+                      className: "form-control",
+                      id: "inputFirstName"
+                    })
+                  ),
+                  _react2.default.createElement(
+                    "div",
+                    { className: "col-md-6 col-lg-6 p-3" },
+                    _react2.default.createElement(
+                      "label",
+                      { htmlFor: "inputLastName" },
+                      "Last Name"
+                    ),
+                    _react2.default.createElement("input", {
+                      value: this.state.lastname,
+                      onChange: this.handleChange.bind(this, "lastname"),
+                      type: "name",
+                      className: "form-control",
+                      id: "inputLastName"
+                    })
+                  )
+                )
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "form-group" },
+                _react2.default.createElement(
+                  "label",
+                  { htmlFor: "inputEmailAddress" },
+                  "Email Address"
+                ),
+                _react2.default.createElement("input", {
+                  value: this.state.email,
+                  onChange: this.handleChange.bind(this, "email"),
+                  type: "email",
+                  className: "form-control",
+                  id: "inputEmailAddress"
+                })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "form-row" },
+                _react2.default.createElement(
+                  "div",
+                  { className: "col" },
+                  _react2.default.createElement(
+                    "button",
+                    {
+                      type: "button",
+                      className: "btn btn-success",
+                      onClick: this.updateAccountInfo.bind(this),
+                      disabled: this.state.submitted
+                    },
+                    _react2.default.createElement("i", { className: "glyphicon glyphicon-edit" }),
+                    " ",
+                    this.state.submitted ? "Saving..." : "Save"
+                  )
                 ),
                 _react2.default.createElement(
-                    'div',
-                    { className: 'row' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'card card-register mx-auto my-4' },
-                        _react2.default.createElement(
-                            'h3',
-                            { className: 'card-header bg-dark text-white' },
-                            'Account information'
-                        ),
-                        this.state.account_editing_mode == true ? _react2.default.createElement(
-                            'form',
-                            { className: 'card-body' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-row' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'form-group' },
-                                    _react2.default.createElement(
-                                        'div',
-                                        { className: 'col-md-6 col-lg-6 p-3' },
-                                        _react2.default.createElement(
-                                            'label',
-                                            { htmlFor: 'inputFirstName' },
-                                            'First Name'
-                                        ),
-                                        _react2.default.createElement('input', { value: this.state.firstname, onChange: this.handleChange.bind(this, 'firstname'), type: 'name', className: 'form-control', id: 'inputFirstName' })
-                                    ),
-                                    _react2.default.createElement(
-                                        'div',
-                                        { className: 'col-md-6 col-lg-6 p-3' },
-                                        _react2.default.createElement(
-                                            'label',
-                                            { htmlFor: 'inputLastName' },
-                                            'Last Name'
-                                        ),
-                                        _react2.default.createElement('input', { value: this.state.lastname, onChange: this.handleChange.bind(this, 'lastname'), type: 'name', className: 'form-control', id: 'inputLastName' })
-                                    )
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-group' },
-                                _react2.default.createElement(
-                                    'label',
-                                    { htmlFor: 'inputEmailAddress' },
-                                    'Email Address'
-                                ),
-                                _react2.default.createElement('input', { value: this.state.email, onChange: this.handleChange.bind(this, 'email'), type: 'email', className: 'form-control', id: 'inputEmailAddress' })
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-row' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'col' },
-                                    _react2.default.createElement(
-                                        'button',
-                                        { type: 'button', className: 'btn btn-success', onClick: this.updateAccountInfo.bind(this), disabled: this.state.submitted },
-                                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-edit' }),
-                                        ' ',
-                                        this.state.submitted ? 'Saving...' : 'Save'
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'col text-right' },
-                                    _react2.default.createElement(
-                                        'button',
-                                        { type: 'button', className: 'btn btn-danger ml-auto', onClick: this.switch_mode.bind(this, 'account') },
-                                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-edit' }),
-                                        '  Cancel'
-                                    )
-                                )
-                            )
-                        ) : _react2.default.createElement(
-                            'form',
-                            { className: 'card-body' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-row' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'form-group col-md-6' },
-                                    _react2.default.createElement(
-                                        'label',
-                                        { htmlFor: 'inputFirstName' },
-                                        'First Name'
-                                    ),
-                                    _react2.default.createElement('input', { value: this.state.saved_firstname, type: 'name', className: 'form-control', id: 'inputFirstName', disabled: true })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'form-group col-md-6' },
-                                    _react2.default.createElement(
-                                        'label',
-                                        { htmlFor: 'inputLastName' },
-                                        'Last Name'
-                                    ),
-                                    _react2.default.createElement('input', { value: this.state.saved_lastname, type: 'name', className: 'form-control', id: 'inputLastName', disabled: true })
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-group' },
-                                _react2.default.createElement(
-                                    'label',
-                                    { htmlFor: 'inputEmailAddress' },
-                                    'Email Address'
-                                ),
-                                _react2.default.createElement('input', { value: this.state.saved_email, type: 'email', className: 'form-control', id: 'inputEmailAddress', disabled: true })
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-row' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'col' },
-                                    _react2.default.createElement(
-                                        'button',
-                                        { type: 'button', className: 'btn btn-default', onClick: this.switch_mode.bind(this, 'account') },
-                                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-edit' }),
-                                        ' Edit'
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'col text-right' },
-                                    _react2.default.createElement(
-                                        'button',
-                                        { type: 'button', className: 'btn btn-default ml-auto', disabled: true },
-                                        'Cancel'
-                                    )
-                                )
-                            )
-                        )
-                    )
+                  "div",
+                  { className: "col text-right" },
+                  _react2.default.createElement(
+                    "button",
+                    {
+                      type: "button",
+                      className: "btn btn-danger ml-auto",
+                      onClick: this.switch_mode.bind(this, "account")
+                    },
+                    _react2.default.createElement("i", { className: "glyphicon glyphicon-edit" }),
+                    " Cancel"
+                  )
                 )
-            );
-        }
-    }]);
+              )
+            ) : _react2.default.createElement(
+              "form",
+              { className: "card-body" },
+              _react2.default.createElement(
+                "div",
+                { className: "form-row" },
+                _react2.default.createElement(
+                  "div",
+                  { className: "form-group col-md-6" },
+                  _react2.default.createElement(
+                    "label",
+                    { htmlFor: "inputFirstName" },
+                    "First Name"
+                  ),
+                  _react2.default.createElement("input", {
+                    value: this.state.saved_firstname,
+                    type: "name",
+                    className: "form-control",
+                    id: "inputFirstName",
+                    disabled: true
+                  })
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { className: "form-group col-md-6" },
+                  _react2.default.createElement(
+                    "label",
+                    { htmlFor: "inputLastName" },
+                    "Last Name"
+                  ),
+                  _react2.default.createElement("input", {
+                    value: this.state.saved_lastname,
+                    type: "name",
+                    className: "form-control",
+                    id: "inputLastName",
+                    disabled: true
+                  })
+                )
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "form-group" },
+                _react2.default.createElement(
+                  "label",
+                  { htmlFor: "inputEmailAddress" },
+                  "Email Address"
+                ),
+                _react2.default.createElement("input", {
+                  value: this.state.saved_email,
+                  type: "email",
+                  className: "form-control",
+                  id: "inputEmailAddress",
+                  disabled: true
+                })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "form-row" },
+                _react2.default.createElement(
+                  "div",
+                  { className: "col" },
+                  _react2.default.createElement(
+                    "button",
+                    {
+                      type: "button",
+                      className: "btn btn-default",
+                      onClick: this.switch_mode.bind(this, "account")
+                    },
+                    _react2.default.createElement("i", { className: "glyphicon glyphicon-edit" }),
+                    " Edit"
+                  )
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { className: "col text-right" },
+                  _react2.default.createElement(
+                    "button",
+                    {
+                      type: "button",
+                      className: "btn btn-default ml-auto",
+                      disabled: true
+                    },
+                    "Cancel"
+                  )
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
 
-    return AccountComponent;
+  return AccountComponent;
 }(_react2.default.Component);
 
-;
-
 var AccountExport = function AccountExport() {
-    if (document.getElementById('account-section') != null) {
+  if (document.getElementById("account-section") != null) {
+    var element = document.getElementById("props");
+    var props = JSON.parse(element.getAttribute("data-props"));
 
-        var element = document.getElementById('props');
-        var props = JSON.parse(element.getAttribute('data-props'));
-
-        (0, _reactDom.render)(_react2.default.createElement(AccountComponent, { user: props.user, messages: props.messages }), document.getElementById('account-section'));
-    }
+    (0, _reactDom.render)(_react2.default.createElement(AccountComponent, { user: props.user, messages: props.messages }), document.getElementById("account-section"));
+  }
 };
 
 module.exports = AccountExport();
@@ -28202,13 +28251,13 @@ var DataRow = function (_React$Component) {
   }
 
   _createClass(DataRow, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var self = this;
 
       var get_data = function get_data(record, param) {
         return _react2.default.createElement(
-          'td',
+          "td",
           null,
           record[param]
         );
@@ -28219,7 +28268,7 @@ var DataRow = function (_React$Component) {
       });
 
       return _react2.default.createElement(
-        'tr',
+        "tr",
         null,
         data
       );
@@ -28245,34 +28294,34 @@ var DataCard = function (_React$Component2) {
   }
 
   _createClass(DataCard, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var self = this;
       var get_data = function get_data(record, param) {
         return _react2.default.createElement(
-          'p',
+          "p",
           null,
           _react2.default.createElement(
-            'strong',
+            "strong",
             null,
             param
           ),
-          ': ',
+          ": ",
           String(record[param])
         );
       };
 
       var data = self.state.params.map(function (param) {
-        return param !== 'id' ? get_data(self.state.record.versions[0], param) : null;
+        return param !== "id" ? get_data(self.state.record.versions[0], param) : null;
       });
 
       return _react2.default.createElement(
-        'div',
-        { className: 'card' },
+        "div",
+        { className: "card" },
         _react2.default.createElement(
-          'h3',
+          "h3",
           null,
-          'Id#',
+          "Id#",
           this.state.record.id
         ),
         data
@@ -28294,7 +28343,7 @@ var DataComponent = function (_React$Component3) {
     _this3.state = {
       records: [],
       params: [],
-      table: 'users',
+      table: "users",
       tables: [],
       application: {},
       loading: true,
@@ -28304,13 +28353,13 @@ var DataComponent = function (_React$Component3) {
   }
 
   _createClass(DataComponent, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.loadAppData();
       this.loadTableData(this.state.table);
     }
   }, {
-    key: 'loadAppData',
+    key: "loadAppData",
     value: function loadAppData() {
       var page = this;
 
@@ -28321,7 +28370,7 @@ var DataComponent = function (_React$Component3) {
         }
       };
 
-      _axios2.default.get('/admin/api/app', config).then(function (response) {
+      _axios2.default.get("/admin/api/app", config).then(function (response) {
         if (response.data.success) {
           page.setState({
             application: response.data.application,
@@ -28332,11 +28381,11 @@ var DataComponent = function (_React$Component3) {
         }
       }).catch(function (error) {
         console.log(error);
-        _toastr2.default.error('There was an error');
+        _toastr2.default.error("There was an error");
       });
     }
   }, {
-    key: 'loadTableData',
+    key: "loadTableData",
     value: function loadTableData(table) {
       var page = this;
       var config = {
@@ -28350,7 +28399,7 @@ var DataComponent = function (_React$Component3) {
         loading: true
       });
 
-      _axios2.default.get('/admin/api/' + table, config).then(function (response) {
+      _axios2.default.get("/admin/api/" + table, config).then(function (response) {
         if (response.data.success) {
           page.setState({
             records: response.data.records,
@@ -28364,19 +28413,19 @@ var DataComponent = function (_React$Component3) {
             loading: false
           });
 
-          if (response.data.error && response.data.error === 'table-not-found' && page.state.tables.length > 0) {
-            _toastr2.default.error('Table in database but app has no model file for it!');
+          if (response.data.error && response.data.error === "table-not-found" && page.state.tables.length > 0) {
+            _toastr2.default.error("Table in database but app has no model file for it!");
           } else {
-            _toastr2.default.error('No table history');
+            _toastr2.default.error("No table history");
           }
         }
       }).catch(function (error) {
         console.log(error);
-        _toastr2.default.error('There was an error');
+        _toastr2.default.error("There was an error");
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this4 = this;
 
@@ -28384,7 +28433,7 @@ var DataComponent = function (_React$Component3) {
 
       var headers = self.state.params.map(function (param) {
         return _react2.default.createElement(
-          'th',
+          "th",
           null,
           param
         );
@@ -28395,22 +28444,22 @@ var DataComponent = function (_React$Component3) {
       });
 
       var table_version = _react2.default.createElement(
-        'div',
-        { className: 'container-fluid' },
+        "div",
+        { className: "container-fluid" },
         _react2.default.createElement(
-          'table',
-          { className: 'table table-striped' },
+          "table",
+          { className: "table table-striped" },
           _react2.default.createElement(
-            'thead',
+            "thead",
             null,
             _react2.default.createElement(
-              'tr',
+              "tr",
               null,
               headers
             )
           ),
           _react2.default.createElement(
-            'tbody',
+            "tbody",
             null,
             body
           )
@@ -28423,8 +28472,11 @@ var DataComponent = function (_React$Component3) {
 
       var tables = this.state.tables.map(function (table) {
         return _react2.default.createElement(
-          'button',
-          { className: 'btn btn-link', onClick: _this4.loadTableData.bind(_this4, table) },
+          "button",
+          {
+            className: "btn btn-link",
+            onClick: _this4.loadTableData.bind(_this4, table)
+          },
           table
         );
       });
@@ -28432,27 +28484,27 @@ var DataComponent = function (_React$Component3) {
       var data_display = this.state.table_display ? table_version : card_version;
 
       return _react2.default.createElement(
-        'div',
-        { className: 'container-fluid' },
+        "div",
+        { className: "row" },
         _react2.default.createElement(
-          'div',
-          { className: 'container text-center' },
+          "div",
+          { className: "text-center" },
           tables
         ),
         _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
+          "div",
+          { className: "text-center" },
           _react2.default.createElement(
-            'h2',
+            "h2",
             null,
-            'Current table: ',
+            "Current table: ",
             this.state.table
           )
         ),
         this.state.loading ? _react2.default.createElement(
-          'p',
-          { className: 'alert alert-info' },
-          'Loading'
+          "p",
+          { className: "alert alert-info" },
+          "Loading"
         ) : data_display
       );
     }
@@ -28462,15 +28514,15 @@ var DataComponent = function (_React$Component3) {
 }(_react2.default.Component);
 
 var DataComponentExport = function DataComponentExport() {
-  if (document.getElementById('app-data') != null) {
-    var element = document.getElementById('props');
-    var props = JSON.parse(element.getAttribute('data-props'));
+  if (document.getElementById("app-data") != null) {
+    var element = document.getElementById("props");
+    var props = JSON.parse(element.getAttribute("data-props"));
 
     (0, _reactDom.render)(_react2.default.createElement(DataComponent, {
       user: props.user,
       validation: props.validation,
       public_key: props.public_key
-    }), document.getElementById('app-data'));
+    }), document.getElementById("app-data"));
   }
 };
 
@@ -38896,18 +38948,24 @@ function getBalance(secret, address, api_key, public_key) {
   };
 
   return new Promise(function (resolve, reject) {
-    _axios2.default.post('/admin/api/tables/balance', {
+    _axios2.default.post("/admin/api/tables/balance", {
       account: secret
     }, config).then(function (response) {
       if (response.data.success === true) {
         resolve(response.data);
       } else {
         console.log(response.data);
-        reject({ success: false, message: 'Error obtaining balance of ' + address });
+        reject({
+          success: false,
+          message: "Error obtaining balance of " + address
+        });
       }
     }).catch(function (error) {
       console.log(error);
-      reject({ success: false, message: 'Error obtaining balance of ' + address });
+      reject({
+        success: false,
+        message: "Error obtaining balance of " + address
+      });
     });
   });
 }
@@ -38931,19 +38989,19 @@ var TableComponent = function (_React$Component) {
   }
 
   _createClass(TableComponent, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.getAddressBalance();
     }
   }, {
-    key: 'showPassphrase',
+    key: "showPassphrase",
     value: function showPassphrase() {
       this.setState({
         show_passphrase: !this.state.show_passphrase
       });
     }
   }, {
-    key: 'getAddressBalance',
+    key: "getAddressBalance",
     value: function getAddressBalance() {
       var self = this;
       var state = this.state;
@@ -38961,94 +39019,102 @@ var TableComponent = function (_React$Component) {
           });
         } else {
           console.log(response);
-          _toastr2.default.error('There was an error loading app address balance');
+          _toastr2.default.error("There was an error loading app address balance");
         }
       }).catch(function (error) {
         _toastr2.default.error(error.message);
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var state = this.state;
       var table = state.table;
 
       var data = table[state.name];
       return _react2.default.createElement(
-        'div',
-        { className: 'container' },
+        "div",
+        { className: "row" },
         _react2.default.createElement(
-          'h3',
+          "h3",
           null,
           this.state.name
         ),
         _react2.default.createElement(
-          'div',
-          { className: '' },
+          "div",
+          { className: "" },
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Address:'
+              "Address:"
             ),
-            ' ',
+            " ",
             data.address
           ),
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Passphrase:'
+              "Passphrase:"
             ),
-            ' ',
+            " ",
             state.show_passphrase ? _react2.default.createElement(
-              'span',
+              "span",
               null,
               data.passphrase,
-              ' ',
+              " ",
               _react2.default.createElement(
-                'button',
-                { className: 'btn btn-danger', onClick: this.showPassphrase.bind(this) },
-                'Hide'
+                "button",
+                {
+                  className: "btn btn-danger",
+                  onClick: this.showPassphrase.bind(this)
+                },
+                "Hide"
               )
             ) : _react2.default.createElement(
-              'button',
-              { className: 'btn btn-default', onClick: this.showPassphrase.bind(this) },
-              'Show passphrase'
+              "button",
+              {
+                className: "btn btn-default",
+                onClick: this.showPassphrase.bind(this)
+              },
+              "Show passphrase"
             )
           ),
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Public Key:'
+              "Public Key:"
             ),
-            ' ',
+            " ",
             data.public_key
           ),
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Current balance: '
+              "Current balance: "
             ),
             _react2.default.createElement(
-              'span',
-              { className: state.low_balance ? 'alert alert-warning' : 'alert alert-info' },
+              "span",
+              {
+                className: state.low_balance ? "alert alert-warning" : "alert alert-info"
+              },
               state.balance / Math.pow(10, 8),
-              ' JUP'
+              " JUP"
             )
           )
         ),
-        _react2.default.createElement('hr', null)
+        _react2.default.createElement("hr", null)
       );
     }
   }]);
@@ -39076,13 +39142,13 @@ var AdminComponent = function (_React$Component2) {
   }
 
   _createClass(AdminComponent, [{
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       this.loadAppData();
       this.getAddressBalance();
     }
   }, {
-    key: 'getAddressBalance',
+    key: "getAddressBalance",
     value: function getAddressBalance() {
       var self = this;
       var user = this.props.user;
@@ -39094,14 +39160,14 @@ var AdminComponent = function (_React$Component2) {
           });
         } else {
           console.log(response);
-          _toastr2.default.error('There was an error loading app address balance');
+          _toastr2.default.error("There was an error loading app address balance");
         }
       }).catch(function (error) {
         _toastr2.default.error(error.message);
       });
     }
   }, {
-    key: 'loadAppData',
+    key: "loadAppData",
     value: function loadAppData() {
       var page = this;
 
@@ -39112,7 +39178,7 @@ var AdminComponent = function (_React$Component2) {
         }
       };
 
-      _axios2.default.get('/admin/api/app', config).then(function (response) {
+      _axios2.default.get("/admin/api/app", config).then(function (response) {
         console.log(response.data);
         if (response.data.success === true) {
           page.setState({
@@ -39125,11 +39191,11 @@ var AdminComponent = function (_React$Component2) {
         }
       }).catch(function (error) {
         console.log(error);
-        _toastr2.default.error('There was an error');
+        _toastr2.default.error("There was an error");
       });
     }
   }, {
-    key: 'loadTableData',
+    key: "loadTableData",
     value: function loadTableData(table) {
       var page = this;
       var config = {
@@ -39143,7 +39209,7 @@ var AdminComponent = function (_React$Component2) {
         loading: true
       });
 
-      _axios2.default.get('/admin/api/' + table, config).then(function (response) {
+      _axios2.default.get("/admin/api/" + table, config).then(function (response) {
         if (response.data.success === true) {
           page.setState({
             records: response.data.records,
@@ -39157,19 +39223,19 @@ var AdminComponent = function (_React$Component2) {
             loading: false
           });
 
-          if (response.data.error && response.data.error === 'table-not-found' && page.state.tables.length > 0) {
-            _toastr2.default.error('Table in database but app has no model file for it!');
+          if (response.data.error && response.data.error === "table-not-found" && page.state.tables.length > 0) {
+            _toastr2.default.error("Table in database but app has no model file for it!");
           } else {
-            _toastr2.default.error('No table history');
+            _toastr2.default.error("No table history");
           }
         }
       }).catch(function (error) {
         console.log(error);
-        _toastr2.default.error('There was an error');
+        _toastr2.default.error("There was an error");
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this3 = this;
 
@@ -39177,74 +39243,81 @@ var AdminComponent = function (_React$Component2) {
       var props = this.props;
 
       var tableList = state.tables.map(function (table, index) {
-        return _react2.default.createElement(TableComponent, { table: table, parent: _this3, key: 'table-component-' + index });
+        return _react2.default.createElement(TableComponent, {
+          table: table,
+          parent: _this3,
+          key: "table-component-" + index
+        });
       });
 
       return _react2.default.createElement(
-        'div',
-        { className: 'container-fluid' },
+        "div",
+        { className: "container-fluid" },
         _react2.default.createElement(
-          'div',
-          { className: 'text-center' },
+          "div",
+          { className: "text-center" },
           _react2.default.createElement(
-            'h1',
+            "h1",
             null,
-            'App Summary'
+            "App Summary"
           ),
           _react2.default.createElement(
-            'h2',
+            "h2",
             null,
-            'Address: ',
+            "Address: ",
             props.user.record.account
           ),
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Current balance: '
+              "Current balance: "
             ),
             state.balances && state.balances.balance ? state.balances.balance / Math.pow(10, 8) : 0,
-            ' JUP'
+            " ",
+            "JUP"
           ),
           _react2.default.createElement(
-            'p',
+            "p",
             null,
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Required app balance: '
+              "Required app balance: "
             ),
             state.balances && state.balances.minAppBalanceAmount ? state.balances.minAppBalanceAmount / Math.pow(10, 8) : 0,
-            ' JUP'
+            " ",
+            "JUP"
           )
         ),
-        _react2.default.createElement('hr', null),
+        _react2.default.createElement("hr", null),
         _react2.default.createElement(
-          'div',
-          { className: 'container' },
+          "div",
+          { className: "container" },
           _react2.default.createElement(
-            'h2',
-            { className: 'text-center' },
-            'Tables'
+            "h2",
+            { className: "text-center" },
+            "Tables"
           ),
           _react2.default.createElement(
-            'p',
-            { className: 'text-center' },
+            "p",
+            { className: "text-center" },
             _react2.default.createElement(
-              'strong',
+              "strong",
               null,
-              'Required Table balance: '
+              "Required Table balance: "
             ),
             state.balances && state.balances.minTableBalanceAmount ? state.balances.minTableBalanceAmount / Math.pow(10, 8) : 0,
-            ' JUP'
+            " ",
+            "JUP"
           ),
-          _react2.default.createElement('hr', null),
+          _react2.default.createElement("hr", null),
           state.loading ? _react2.default.createElement(
-            'p',
-            { className: 'text-center alert alert-info' },
-            'Loading'
+            "p",
+            { className: "text-center alert alert-info" },
+            "Loading"
           ) : tableList
         )
       );
@@ -39255,14 +39328,15 @@ var AdminComponent = function (_React$Component2) {
 }(_react2.default.Component);
 
 var AdminDashboardComponentExport = function AdminDashboardComponentExport() {
-  if (document.getElementById('app-admin-dashboard') != null) {
-    var element = document.getElementById('props');
-    var props = JSON.parse(element.getAttribute('data-props'));
+  if (document.getElementById("app-admin-dashboard") != null) {
+    var element = document.getElementById("props");
+    var props = JSON.parse(element.getAttribute("data-props"));
 
     (0, _reactDom.render)(_react2.default.createElement(AdminComponent, {
       user: props.user,
       validation: props.validation,
-      public_key: props.public_key }), document.getElementById('app-admin-dashboard'));
+      public_key: props.public_key
+    }), document.getElementById("app-admin-dashboard"));
   }
 };
 
@@ -39558,24 +39632,18 @@ var LoginForm = function (_React$Component) {
           "div",
           { className: "form-group" },
           _react2.default.createElement(
-            "div",
-            { className: "form-label-group" },
-            _react2.default.createElement("input", {
-              type: "password",
-              id: "inputPassphrase",
-              className: "form-control",
-              required: "required",
-              value: this.state.jup_passphrase,
-              onChange: this.handleChange.bind(this),
-              placeholder: "Your Jupiter Passphrase",
-              autoComplete: "current-password"
-            }),
-            _react2.default.createElement(
-              "label",
-              { "for": "inputPassphrase" },
-              "Enter your passphrase"
-            )
-          )
+            "label",
+            { htmlFor: "inputPassword" },
+            "Enter your Passphrase"
+          ),
+          _react2.default.createElement("input", {
+            type: "password",
+            id: "inputPassword",
+            className: "form-control",
+            required: "required",
+            value: this.state.jup_passphrase,
+            onChange: this.handleChange.bind(this)
+          })
         ),
         _react2.default.createElement(
           "button",
@@ -39583,7 +39651,7 @@ var LoginForm = function (_React$Component) {
             className: "btn btn-primary btn-block",
             onClick: this.logIn.bind(this)
           },
-          "Login"
+          "Submit"
         )
       );
       return _react2.default.createElement(
@@ -40304,463 +40372,644 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // place where you'd like in your app
 
 var SignupForm = function (_React$Component) {
-    _inherits(SignupForm, _React$Component);
+  _inherits(SignupForm, _React$Component);
 
-    function SignupForm(props) {
-        _classCallCheck(this, SignupForm);
+  function SignupForm(props) {
+    _classCallCheck(this, SignupForm);
 
-        var _this = _possibleConstructorReturn(this, (SignupForm.__proto__ || Object.getPrototypeOf(SignupForm)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (SignupForm.__proto__ || Object.getPrototypeOf(SignupForm)).call(this, props));
 
-        _this.testConnection = function (event) {
-            event.preventDefault();
+    _this.testConnection = function (event) {
+      event.preventDefault();
 
-            var axios = __webpack_require__(7);
+      var axios = __webpack_require__(7);
 
-            axios.post('/test_connection', {}).then(function (response) {
-                if (response.data.success == true) {
-                    console.log('Success');
-                    console.log(response.data.response);
-                } else {
-                    console.log('Error');
-                }
-            }).catch(function (error) {
-                console.log(error);
+      axios.post("/test_connection", {}).then(function (response) {
+        if (response.data.success == true) {
+          console.log("Success");
+          console.log(response.data.response);
+        } else {
+          console.log("Error");
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    };
+
+    _this.confirmedPassphrase = function (event) {
+      event.preventDefault();
+
+      _this.setState({
+        passphrase_confirmation_page: true
+      });
+    };
+
+    _this.generatePassphrase = function (event) {
+      event.preventDefault();
+
+      var axios = __webpack_require__(7);
+
+      var page = _this;
+
+      axios.get("/create_passphrase").then(function (response) {
+        if (response.data.success == true) {
+          console.log(response.data.message);
+          page.setState({
+            jup_account_created: true,
+            generated_passphrase: response.data.result
+          });
+
+          toastr.success("Passphrase generated!");
+        } else {
+          toastr.error("There was an error in your passphrase");
+        }
+      }).catch(function (error) {
+        toastr.error("There was an error in generating passphrase");
+        console.log(error);
+      });
+    };
+
+    _this.confirmPassphrase = function (event) {
+      event.preventDefault();
+      var axios = __webpack_require__(7);
+
+      var page = _this;
+
+      if (_this.state.generated_passphrase != _this.state.passphrase_confirmation) {
+        /*this.setState({
+                  confirmation_message: 'The passphrase you entered is not correct!'
+              });*/
+        toastr.error("The passphrase you entered is not correct!");
+      } else {
+        axios.post("/create_jupiter_account", {
+          account_data: {
+            passphrase: _this.state.generated_passphrase,
+            email: _this.state.email,
+            firstname: _this.state.firstname,
+            lastname: _this.state.lastname,
+            twofa_enabled: _this.state.twofa_enabled
+          }
+        }).then(function (response) {
+          if (response.data.success == true) {
+            console.log(response.data);
+            page.setState({
+              account_object: response.data.account,
+              public_key: response.data.account.public_key,
+              confirmation_message: " " + response.data.account.account + " "
             });
-        };
+          } else {
+            toastr.error(response.data.message);
+          }
+        }).catch(function (error) {
+          console.log(error);
+          toastr.error("There was an error!");
+        });
+        _this.setState({
+          confirmation_message: "Loading...",
+          passphrase_confirmed: true
+        });
+      }
+    };
 
-        _this.confirmedPassphrase = function (event) {
-            event.preventDefault();
+    _this.handleChange = function (i_type, event) {
+      if (i_type == "account") {
+        _this.setState({
+          jup_account: event.target.value
+        });
+      } else if (i_type == "pass") {
+        _this.setState({
+          jup_passphrase: event.target.value
+        });
+      } else if (i_type == "firstname") {
+        _this.setState({
+          firstname: event.target.value
+        });
+      } else if (i_type == "lastname") {
+        _this.setState({
+          lastname: event.target.value
+        });
+      } else if (i_type == "email") {
+        _this.setState({
+          email: event.target.value
+        });
+      } else if (i_type == "passphrase_confirm") {
+        _this.setState({
+          passphrase_confirmation: event.target.value
+        });
+      }
+    };
 
-            _this.setState({
-                passphrase_confirmation_page: true
-            });
-        };
+    _this.state = {
+      new_jup_account: false,
+      jup_account_created: false,
+      jup_account: "",
+      jup_passphrase: "",
+      firstname: "",
+      lastname: "",
+      email: "",
+      enable_two_fa: false,
+      generated_passphrase: "",
+      passphrase_confirmation: "",
+      passphrase_confirmation_page: false,
+      passphrase_confirmed: false,
+      confirmation_message: "",
+      account_object: "",
+      public_key: ""
+    };
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.registerAccount = _this.registerAccount.bind(_this);
+    _this.update2FA = _this.update2FA.bind(_this);
+    _this.testConnection = _this.testConnection.bind(_this);
+    _this.generatePassphrase = _this.generatePassphrase.bind(_this);
+    return _this;
+  }
 
-        _this.generatePassphrase = function (event) {
-            event.preventDefault();
-
-            var axios = __webpack_require__(7);
-
-            var page = _this;
-
-            axios.get('/create_passphrase').then(function (response) {
-                if (response.data.success == true) {
-                    console.log(response.data.message);
-                    page.setState({
-                        jup_account_created: true,
-                        generated_passphrase: response.data.result
-                    });
-
-                    toastr.success('Passphrase generated!');
-                } else {
-                    toastr.error('There was an error in your passphrase');
-                }
-            }).catch(function (error) {
-                toastr.error('There was an error in generating passphrase');
-                console.log(error);
-            });
-        };
-
-        _this.confirmPassphrase = function (event) {
-            event.preventDefault();
-            var axios = __webpack_require__(7);
-
-            var page = _this;
-
-            if (_this.state.generated_passphrase != _this.state.passphrase_confirmation) {
-                /*this.setState({
-                    confirmation_message: 'The passphrase you entered is not correct!'
-                });*/
-                toastr.error('The passphrase you entered is not correct!');
-            } else {
-
-                axios.post('/create_jupiter_account', {
-                    account_data: {
-                        passphrase: _this.state.generated_passphrase,
-                        email: _this.state.email,
-                        firstname: _this.state.firstname,
-                        lastname: _this.state.lastname,
-                        twofa_enabled: _this.state.twofa_enabled
-                    }
-                }).then(function (response) {
-                    if (response.data.success == true) {
-                        console.log(response.data);
-                        page.setState({
-                            account_object: response.data.account,
-                            public_key: response.data.account.public_key,
-                            confirmation_message: 'Passphrase confirmed and Jupiter account ' + response.data.account.account + ' was created for you. Please click below to finalize your account creation.'
-                        });
-                    } else {
-                        toastr.error(response.data.message);
-                    }
-                }).catch(function (error) {
-                    console.log(error);
-                    toastr.error('There was an error!');
-                });
-                _this.setState({
-                    confirmation_message: 'Passphrase confirmed. Please confirm account details!',
-                    passphrase_confirmed: true
-                });
-            }
-        };
-
-        _this.handleChange = function (i_type, event) {
-
-            if (i_type == 'account') {
-                _this.setState({
-                    jup_account: event.target.value
-                });
-            } else if (i_type == 'pass') {
-                _this.setState({
-                    jup_passphrase: event.target.value
-                });
-            } else if (i_type == 'firstname') {
-                _this.setState({
-                    firstname: event.target.value
-                });
-            } else if (i_type == 'lastname') {
-                _this.setState({
-                    lastname: event.target.value
-                });
-            } else if (i_type == 'email') {
-                _this.setState({
-                    email: event.target.value
-                });
-            } else if (i_type == 'passphrase_confirm') {
-                _this.setState({
-                    passphrase_confirmation: event.target.value
-                });
-            }
-        };
-
-        _this.state = {
-            new_jup_account: false,
-            jup_account_created: false,
-            jup_account: '',
-            jup_passphrase: '',
-            firstname: '',
-            lastname: '',
-            email: '',
-            enable_two_fa: false,
-            generated_passphrase: '',
-            passphrase_confirmation: '',
-            passphrase_confirmation_page: false,
-            passphrase_confirmed: false,
-            confirmation_message: '',
-            account_object: '',
-            public_key: ''
-        };
-        _this.handleChange = _this.handleChange.bind(_this);
-        _this.registerAccount = _this.registerAccount.bind(_this);
-        _this.update2FA = _this.update2FA.bind(_this);
-        _this.testConnection = _this.testConnection.bind(_this);
-        _this.generatePassphrase = _this.generatePassphrase.bind(_this);
-        return _this;
+  _createClass(SignupForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      /*if (this.props.messages != null && this.props.messages.signupMessage != null){
+              this.props.messages.signupMessage.map(function(message){
+                  toastr.error(message);
+              });
+          }*/
     }
+  }, {
+    key: "registerAccount",
+    value: function registerAccount(event) {
+      event.preventDefault();
 
-    _createClass(SignupForm, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            /*if (this.props.messages != null && this.props.messages.signupMessage != null){
-                this.props.messages.signupMessage.map(function(message){
-                    toastr.error(message);
-                });
-            }*/
+      var axios = __webpack_require__(7);
+
+      var page = this;
+
+      axios.post("/create_account", {
+        account_data: {
+          passphrase: this.state.generated_passphrase,
+          email: this.state.email,
+          twofa_enabled: this.state.enable_two_fa,
+          firstname: this.state.firstname,
+          lastname: this.state.lastname
         }
-    }, {
-        key: 'registerAccount',
-        value: function registerAccount(event) {
-            event.preventDefault();
-
-            var axios = __webpack_require__(7);
-
-            var page = this;
-
-            axios.post('/create_account', {
-                account_data: {
-                    passphrase: this.state.generated_passphrase,
-                    email: this.state.email,
-                    twofa_enabled: this.state.enable_two_fa,
-                    firstname: this.state.firstname,
-                    lastname: this.state.lastname
-                }
-            }).then(function (response) {
-                console.log(response.data);
-                if (response.data.success == true) {
-                    console.log(response.data);
-                } else {
-                    console.log('There was an error creating your account');
-                    page.setState({
-                        confirmation_message: response.data.message
-                    });
-                }
-            }).catch(function (error) {
-                console.log('There was an error!');
-                console.log(error);
-            });
+      }).then(function (response) {
+        console.log(response.data);
+        if (response.data.success == true) {
+          console.log(response.data);
+        } else {
+          console.log("There was an error creating your account");
+          page.setState({
+            confirmation_message: response.data.message
+          });
         }
-    }, {
-        key: 'update2FA',
-        value: function update2FA(i_type, event) {
-            event.preventDefault();
-            if (i_type == 'true') {
-                this.setState({
-                    enable_two_fa: true
-                });
-            } else {
-                this.setState({
-                    enable_two_fa: false
-                });
-            }
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var new_account_summary = _react2.default.createElement(
-                'form',
-                { action: '/signup', method: 'post', className: '' },
-                _react2.default.createElement(
-                    'div',
-                    { className: '' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: '' },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'label',
-                                null,
-                                'First name'
-                            ),
-                            _react2.default.createElement('input', { value: this.state.firstname, name: 'firstname', className: 'form-control', disabled: true }),
-                            _react2.default.createElement('input', { type: 'hidden', value: this.state.firstname, name: 'firstname', className: 'form-control' })
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'label',
-                                null,
-                                'Last name'
-                            ),
-                            _react2.default.createElement('input', { value: this.state.lastname, name: 'lastname', className: 'form-control', disabled: true }),
-                            _react2.default.createElement('input', { type: 'hidden', value: this.state.lastname, name: 'lastname', className: 'form-control' })
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            _react2.default.createElement(
-                                'label',
-                                null,
-                                'Email'
-                            ),
-                            _react2.default.createElement('input', { value: this.state.email, name: 'email', className: 'form-control', disabled: true }),
-                            _react2.default.createElement('input', { type: 'hidden', value: this.state.email, name: 'email', className: 'form-control' })
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: '' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement('input', { type: 'hidden', name: 'account', value: this.state.account_object.account }),
-                        _react2.default.createElement('input', { type: 'hidden', name: 'accounthash', value: this.state.account_object.account }),
-                        _react2.default.createElement('input', { type: 'hidden', name: 'twofa_enabled', value: this.state.enable_two_fa }),
-                        _react2.default.createElement('input', { type: 'hidden', name: 'public_key', value: this.state.public_key }),
-                        _react2.default.createElement('input', { type: 'hidden', name: 'key', value: this.state.generated_passphrase }),
-                        _react2.default.createElement('input', { type: 'hidden', name: 'jup_account_id', value: this.state.account_object.jup_account_id })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'lable',
-                            null,
-                            _react2.default.createElement(
-                                'strong',
-                                null,
-                                'Enable two-factor authentication'
-                            ),
-                            ' ',
-                            this.state.enable_two_fa == true ? 'Yes' : 'No'
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            this.state.confirmation_message
-                        ),
-                        this.state.enable_two_fa == true && _react2.default.createElement(
-                            'p',
-                            null,
-                            'You requested for two-factor authentication to be enabled. You will be redirected to the two-factor setup after clicking the button below.'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        this.state.account != '' && _react2.default.createElement('input', { type: 'submit', value: 'Complete registration', className: 'btn btn-primary' })
-                    )
-                )
-            );
-
-            var generated_account = _react2.default.createElement(
-                'div',
-                { className: 'form-group' },
-                _react2.default.createElement(
-                    'div',
-                    { className: '' },
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Your new passphrase:'
-                    ),
-                    _react2.default.createElement(
-                        'form',
-                        { className: 'form-group' },
-                        _react2.default.createElement(
-                            'p',
-                            { className: 'alert alert-info' },
-                            this.state.generated_passphrase
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: '' },
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Acount Details:'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group details' },
-                        _react2.default.createElement('input', { className: 'form-control', value: this.state.firstname, onChange: this.handleChange.bind(this, 'firstname'), placeholder: 'First name', type: 'text' }),
-                        _react2.default.createElement('input', { className: 'form-control', value: this.state.lastname, onChange: this.handleChange.bind(this, 'lastname'), placeholder: 'Last name', type: 'text' }),
-                        _react2.default.createElement('input', { className: 'form-control', value: this.state.email, onChange: this.handleChange.bind(this, 'email'), placeholder: 'Email address', type: 'email' })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        'Enable 2FA Security:'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'yn-button' },
-                        _react2.default.createElement(
-                            'button',
-                            { className: "btn" + (this.state.enable_two_fa == true ? ' btn-success active' : ' btn-default'), onClick: this.update2FA.bind(this, 'true') },
-                            'Yes'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            { className: "btn btn-default" + (this.state.enable_two_fa == false ? '  btn-danger active' : ' btn-default'), onClick: this.update2FA.bind(this, 'false') },
-                            'No'
-                        )
-                    )
-                ),
-                this.state.jup_account_created == true ? _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'button',
-                        { disabled: !this.state.firstname || !this.state.lastname || !this.state.email, className: 'btn btn-primary btn-block', onClick: this.confirmedPassphrase.bind(this) },
-                        'Create my account'
-                    )
+      }).catch(function (error) {
+        console.log("There was an error!");
+        console.log(error);
+      });
+    }
+  }, {
+    key: "update2FA",
+    value: function update2FA(i_type, event) {
+      event.preventDefault();
+      if (i_type == "true") {
+        this.setState({
+          enable_two_fa: true
+        });
+      } else {
+        this.setState({
+          enable_two_fa: false
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var new_account_summary = _react2.default.createElement(
+        "form",
+        { action: "/signup", method: "post", className: "text-left" },
+        _react2.default.createElement(
+          "div",
+          { className: "col-8 mx-auto alert alert-primary text-center" },
+          _react2.default.createElement(
+            "span",
+            null,
+            "Passphrase confirmed and account"
+          ),
+          _react2.default.createElement("br", null),
+          this.state.confirmation_message,
+          _react2.default.createElement("br", null),
+          _react2.default.createElement(
+            "span",
+            null,
+            "was created for you."
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "text-center" },
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "label",
+              { className: "mb-0" },
+              "First name"
+            ),
+            _react2.default.createElement(
+              "p",
+              { className: "mt-0" },
+              this.state.firstname
+            ),
+            _react2.default.createElement("input", {
+              type: "hidden",
+              value: this.state.firstname,
+              name: "firstname",
+              className: "form-control",
+              readOnly: true
+            })
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "label",
+              { className: "mb-0" },
+              "Last name"
+            ),
+            _react2.default.createElement(
+              "p",
+              { className: "mt-0" },
+              this.state.lastname
+            ),
+            _react2.default.createElement("input", {
+              type: "hidden",
+              value: this.state.lastname,
+              name: "lastname",
+              className: "form-control",
+              readOnly: true
+            })
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "label",
+              { className: "mb-0" },
+              "Email"
+            ),
+            _react2.default.createElement(
+              "p",
+              { className: "mt-0" },
+              this.state.email
+            ),
+            _react2.default.createElement("input", {
+              type: "hidden",
+              value: this.state.email,
+              name: "email",
+              className: "form-control"
+            })
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "" },
+            _react2.default.createElement(
+              "div",
+              null,
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "account",
+                value: this.state.account_object.account
+              }),
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "accounthash",
+                value: this.state.account_object.account
+              }),
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "twofa_enabled",
+                value: this.state.enable_two_fa
+              }),
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "public_key",
+                value: this.state.public_key
+              }),
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "key",
+                value: this.state.generated_passphrase
+              }),
+              _react2.default.createElement("input", {
+                type: "hidden",
+                name: "jup_account_id",
+                value: this.state.account_object.jup_account_id
+              })
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "form-group" },
+              _react2.default.createElement(
+                "lable",
+                null,
+                "Enable two-factor authentication",
+                " ",
+                this.state.enable_two_fa == true ? _react2.default.createElement(
+                  "p",
+                  { className: "m-0" },
+                  "Yes"
                 ) : _react2.default.createElement(
-                    'div',
-                    { className: 'form-group' },
-                    _react2.default.createElement(
-                        'button',
-                        { disabled: !this.state.firstname || !this.state.lastname || !this.state.email, className: 'btn btn-primary btn-block', onClick: this.registerAccount.bind(this) },
-                        'Create my account'
-                    )
-                ),
-                this.state.confirmation_message
-            );
-
-            var passphrase_confirmation_page = _react2.default.createElement(
-                'form',
-                { className: '' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group signup', id: 'jup-confirm' },
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'Please enter the passphrase of your newly created Jupiter account to confirm it.'
-                    ),
-                    _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.passphrase_confirmation, onChange: this.handleChange.bind(this, 'passphrase_confirm') })
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-group signup' },
-                    _react2.default.createElement(
-                        'button',
-                        { className: 'btn btn-primary', onClick: this.confirmPassphrase.bind(this) },
-                        'Confirm my passphrase'
-                    )
-                ),
-                this.state.confirmation_message
-            );
-
-            var signup_form = _react2.default.createElement(
-                'form',
-                { className: 'jupiter-form' },
-                this.state.jup_account_created == true ? generated_account : _react2.default.createElement(
-                    'div',
-                    { className: 'form-group signup' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group paragraph' },
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            'Gravity is a platform designed to give you quick and easy access to the Jupiter blockchain.'
-                        ),
-                        _react2.default.createElement(
-                            'p',
-                            null,
-                            'Access to the blockchain requires a secure passphrase. This passphrase should be written down and kept in a safe palce. Once you are ready to sign up, click the button below.'
-                        )
-                    ),
-                    _react2.default.createElement('br', null),
-                    _react2.default.createElement(
-                        'button',
-                        { className: 'btn btn-primary btn-block', onClick: this.generatePassphrase.bind(this) },
-                        'Create passphrase'
-                    )
+                  "p",
+                  { className: "m-0" },
+                  "No"
                 )
-            );
+              )
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            null,
+            this.state.account != "" && _react2.default.createElement(
+              "button",
+              {
+                value: "Complete registration",
+                className: "btn btn-primary btn-block"
+              },
+              "Complete Registration"
+            )
+          )
+        )
+      );
 
-            return _react2.default.createElement(
-                'div',
-                { className: '' },
-                this.state.passphrase_confirmation_page == true ? this.state.passphrase_confirmed == true ? new_account_summary : passphrase_confirmation_page : signup_form
-            );
-        }
-    }]);
+      var generated_account = _react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement(
+          "h6",
+          { className: "text-center" },
+          "Your Account Passphrase"
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "col-8 mx-auto alert alert-primary text-center" },
+          _react2.default.createElement(
+            "span",
+            null,
+            this.state.generated_passphrase
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "label",
+            { htmlFor: "inputFirstName" },
+            "First Name"
+          ),
+          _react2.default.createElement("input", {
+            type: "text",
+            id: "inputFirstName",
+            value: this.state.firstname,
+            onChange: this.handleChange.bind(this, "firstname"),
+            className: "form-control"
+          })
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "label",
+            { htmlFor: "inputLastName" },
+            "Last Name"
+          ),
+          _react2.default.createElement("input", {
+            type: "text",
+            id: "inputLastName",
+            value: this.state.lastname,
+            onChange: this.handleChange.bind(this, "lastname"),
+            className: "form-control"
+          })
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "label",
+            { htmlFor: "inputEmail" },
+            "Email Address"
+          ),
+          _react2.default.createElement("input", {
+            type: "text",
+            id: "inputEmail",
+            value: this.state.email,
+            onChange: this.handleChange.bind(this, "email"),
+            className: "form-control"
+          })
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group text-center" },
+          _react2.default.createElement(
+            "h6",
+            null,
+            "Would you like to enable Two-factor Authentication?"
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "custom-control custom-radio" },
+            _react2.default.createElement("input", {
+              type: "radio",
+              id: "customRadio1",
+              name: "customRadio",
+              className: "custom-control-input"
+            }),
+            _react2.default.createElement(
+              "label",
+              { className: "custom-control-label", htmlFor: "customRadio1" },
+              _react2.default.createElement(
+                "p",
+                { className: "mb-0" },
+                "Yes"
+              )
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "custom-control custom-radio" },
+            _react2.default.createElement("input", {
+              type: "radio",
+              id: "customRadio2",
+              name: "customRadio",
+              className: "custom-control-input"
+            }),
+            _react2.default.createElement(
+              "label",
+              { className: "custom-control-label", htmlFor: "customRadio2" },
+              _react2.default.createElement(
+                "p",
+                { className: "mb-0" },
+                "No"
+              )
+            )
+          )
+        ),
+        this.state.jup_account_created == true ? _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "button",
+            {
+              disabled: !this.state.firstname || !this.state.lastname || !this.state.email,
+              className: "btn btn-primary btn-block",
+              onClick: this.confirmedPassphrase.bind(this)
+            },
+            "Submit"
+          )
+        ) : _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "button",
+            {
+              disabled: !this.state.firstname || !this.state.lastname || !this.state.email,
+              className: "btn btn-primary btn-block",
+              onClick: this.registerAccount.bind(this)
+            },
+            "Continue"
+          )
+        ),
+        this.state.confirmation_message
+      );
 
-    return SignupForm;
+      var passphrase_confirmation_page = _react2.default.createElement(
+        "div",
+        { className: "jupiter-form-confirmation" },
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "div",
+            { className: "text-center" },
+            this.state.confirmation_message
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group", id: "jup-confirm" },
+          _react2.default.createElement(
+            "p",
+            null,
+            "Please enter your passphrase to confirm it."
+          ),
+          _react2.default.createElement("input", {
+            type: "text",
+            className: "form-control",
+            value: this.state.passphrase_confirmation,
+            onChange: this.handleChange.bind(this, "passphrase_confirm")
+          })
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "form-group" },
+          _react2.default.createElement(
+            "button",
+            {
+              className: "btn btn-primary btn-block",
+              onClick: this.confirmPassphrase.bind(this)
+            },
+            "Submit"
+          )
+        )
+      );
+
+      var signup_form = _react2.default.createElement(
+        "div",
+        { className: "jupiter-form" },
+        this.state.jup_account_created == true ? generated_account : _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "p",
+              null,
+              _react2.default.createElement(
+                "strong",
+                null,
+                "This app is based on blockchain technology."
+              ),
+              " The blockchain ",
+              _react2.default.createElement(
+                "strong",
+                null,
+                "will generate"
+              ),
+              " an account for you with a secure passphrase. This ",
+              _react2.default.createElement(
+                "strong",
+                null,
+                "12-word"
+              ),
+              " ",
+              "passphrase should be written down ",
+              _react2.default.createElement(
+                "strong",
+                null,
+                "carefully"
+              ),
+              " and kept in a safe place. If you lose your passphrase, you will permanently lose access to your account, there is no way to recover it!"
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "p",
+              null,
+              "By continuing you declare that you have taken notice of and agree on the following: the app creator has access to read all information stored within the app."
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "p",
+              null,
+              "Click on the button below to start."
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "form-group" },
+            _react2.default.createElement(
+              "button",
+              {
+                className: "btn btn-primary btn-block",
+                onClick: this.generatePassphrase.bind(this)
+              },
+              "Create passphrase"
+            )
+          )
+        )
+      );
+
+      return _react2.default.createElement(
+        "div",
+        null,
+        this.state.passphrase_confirmation_page == true ? this.state.passphrase_confirmed == true ? new_account_summary : passphrase_confirmation_page : signup_form
+      );
+    }
+  }]);
+
+  return SignupForm;
 }(_react2.default.Component);
 
-;
-
 var SignupExport = function SignupExport() {
-    if (document.getElementById('signup-form') != null) {
+  if (document.getElementById("signup-form") != null) {
+    var element = document.getElementById("props");
+    var props = JSON.parse(element.getAttribute("data-props"));
 
-        var element = document.getElementById('props');
-        var props = JSON.parse(element.getAttribute('data-props'));
-
-        (0, _reactDom.render)(_react2.default.createElement(SignupForm, { messages: props.messages }), document.getElementById('signup-form'));
-    }
+    (0, _reactDom.render)(_react2.default.createElement(SignupForm, { messages: props.messages }), document.getElementById("signup-form"));
+  }
 };
 
 module.exports = SignupExport();

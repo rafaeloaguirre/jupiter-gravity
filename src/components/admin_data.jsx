@@ -1,14 +1,14 @@
-import React from 'react';
-import { render } from 'react-dom';
-import axios from 'axios';
-import toastr from 'toastr';
+import React from "react";
+import { render } from "react-dom";
+import axios from "axios";
+import toastr from "toastr";
 
 class DataRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       record: this.props.record,
-      params: this.props.params,
+      params: this.props.params
     };
   }
 
@@ -17,13 +17,11 @@ class DataRow extends React.Component {
 
     const get_data = (record, param) => <td>{record[param]}</td>;
 
-    const data = self.state.params.map(param => get_data(self.state.record.versions[0], param));
-
-    return (
-      <tr>
-         {data}
-      </tr>
+    const data = self.state.params.map(param =>
+      get_data(self.state.record.versions[0], param)
     );
+
+    return <tr>{data}</tr>;
   }
 }
 
@@ -32,15 +30,22 @@ class DataCard extends React.Component {
     super(props);
     this.state = {
       record: this.props.record,
-      params: this.props.params,
+      params: this.props.params
     };
   }
 
   render() {
     const self = this;
-    const get_data = (record, param) => <p><strong>{param}</strong>: {String(record[param])}</p>;
+    const get_data = (record, param) => (
+      <p>
+        <strong>{param}</strong>: {String(record[param])}
+      </p>
+    );
 
-    const data = self.state.params.map(param => (param !== 'id' ? get_data(self.state.record.versions[0], param) : null));
+    const data = self.state.params.map(
+      param =>
+        param !== "id" ? get_data(self.state.record.versions[0], param) : null
+    );
 
     return (
       <div className="card">
@@ -57,11 +62,11 @@ class DataComponent extends React.Component {
     this.state = {
       records: [],
       params: [],
-      table: 'users',
+      table: "users",
       tables: [],
       application: {},
       loading: true,
-      table_display: false,
+      table_display: false
     };
   }
 
@@ -76,24 +81,25 @@ class DataComponent extends React.Component {
     const config = {
       headers: {
         user_api_key: this.props.user ? this.props.user.record.api_key : null,
-        user_public_key: this.props.public_key,
-      },
+        user_public_key: this.props.public_key
+      }
     };
 
-    axios.get('/admin/api/app', config)
-      .then((response) => {
+    axios
+      .get("/admin/api/app", config)
+      .then(response => {
         if (response.data.success) {
           page.setState({
             application: response.data.application,
-            tables: response.data.tables,
+            tables: response.data.tables
           });
         } else {
           toastr.error("Error obtaining your app's data");
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
-        toastr.error('There was an error');
+        toastr.error("There was an error");
       });
   }
 
@@ -102,39 +108,44 @@ class DataComponent extends React.Component {
     const config = {
       headers: {
         user_api_key: this.props.user ? this.props.user.record.api_key : null,
-        user_public_key: this.props.public_key,
-      },
+        user_public_key: this.props.public_key
+      }
     };
 
     page.setState({
-      loading: true,
+      loading: true
     });
 
-    axios.get(`/admin/api/${table}`, config)
-      .then((response) => {
+    axios
+      .get(`/admin/api/${table}`, config)
+      .then(response => {
         if (response.data.success) {
           page.setState({
             records: response.data.records,
             params: response.data.params,
-            loading: false,
+            loading: false
           });
         } else {
           page.setState({
             records: [],
             params: [],
-            loading: false,
+            loading: false
           });
 
-          if (response.data.error && response.data.error === 'table-not-found' && page.state.tables.length > 0) {
-            toastr.error('Table in database but app has no model file for it!');
+          if (
+            response.data.error &&
+            response.data.error === "table-not-found" &&
+            page.state.tables.length > 0
+          ) {
+            toastr.error("Table in database but app has no model file for it!");
           } else {
-            toastr.error('No table history');
+            toastr.error("No table history");
           }
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
-        toastr.error('There was an error');
+        toastr.error("There was an error");
       });
   }
 
@@ -143,63 +154,66 @@ class DataComponent extends React.Component {
 
     const headers = self.state.params.map(param => <th>{param}</th>);
 
-    const body = self.state.records.map(
-      record => <DataRow record={record} params={self.state.params} key={record.id} />,
+    const body = self.state.records.map(record => (
+      <DataRow record={record} params={self.state.params} key={record.id} />
+    ));
+
+    const table_version = (
+      <div className="container-fluid">
+        <table className="table table-striped">
+          <thead>
+            <tr>{headers}</tr>
+          </thead>
+          <tbody>{body}</tbody>
+        </table>
+      </div>
     );
 
-    const table_version = <div className="container-fluid">
-                            <table className="table table-striped">
-                                <thead>
-                                    <tr>
-                                        {headers}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {body}
-                                </tbody>
-                            </table>
-                          </div>;
+    const card_version = self.state.records.map(record => (
+      <DataCard record={record} params={self.state.params} key={record.id} />
+    ));
 
-    const card_version = self.state.records.map(
-      record => <DataCard record={record} params={self.state.params} key={record.id}/>,
-    );
+    const tables = this.state.tables.map(table => (
+      <button
+        className="btn btn-link"
+        onClick={this.loadTableData.bind(this, table)}
+      >
+        {table}
+      </button>
+    ));
 
-    const tables = this.state.tables.map(
-      table => <button className="btn btn-link" onClick={this.loadTableData.bind(this, table)}>{table}</button>,
-    );
-
-    const data_display = this.state.table_display ? table_version : card_version;
+    const data_display = this.state.table_display
+      ? table_version
+      : card_version;
 
     return (
-      <div className="container-fluid">
-        <div className="container text-center">
-          {tables}
-        </div>
+      <div className="row">
+        <div className="text-center">{tables}</div>
         <div className="text-center">
           <h2>Current table: {this.state.table}</h2>
         </div>
-        {
-          this.state.loading
-            ? <p className="alert alert-info">Loading</p>
-            : data_display
-        }
+        {this.state.loading ? (
+          <p className="alert alert-info">Loading</p>
+        ) : (
+          data_display
+        )}
       </div>
     );
   }
 }
 
 const DataComponentExport = () => {
-  if (document.getElementById('app-data') != null) {
-    const element = document.getElementById('props');
-    const props = JSON.parse(element.getAttribute('data-props'));
+  if (document.getElementById("app-data") != null) {
+    const element = document.getElementById("props");
+    const props = JSON.parse(element.getAttribute("data-props"));
 
     render(
-     <DataComponent
-      user={props.user}
-      validation={props.validation}
-      public_key={props.public_key}
-     />,
-     document.getElementById('app-data'),
+      <DataComponent
+        user={props.user}
+        validation={props.validation}
+        public_key={props.public_key}
+      />,
+      document.getElementById("app-data")
     );
   }
 };

@@ -100,26 +100,22 @@ class LoginForm extends React.Component {
     var login_form = (
       <form>
         <div className="form-group">
-          <div className="form-label-group">
-            <input
-              type="password"
-              id="inputPassphrase"
-              className="form-control"
-              required="required"
-              value={this.state.jup_passphrase}
-              onChange={this.handleChange.bind(this)}
-              placeholder="Your Jupiter Passphrase"
-              autoComplete="current-password"
-            />
-            <label for="inputPassphrase">Enter your passphrase</label>
-          </div>
+          <label htmlFor="inputPassword">Enter your Passphrase</label>
+          <input
+            type="password"
+            id="inputPassword"
+            className="form-control"
+            required="required"
+            value={this.state.jup_passphrase}
+            onChange={this.handleChange.bind(this)}
+          />
         </div>
 
         <button
           className="btn btn-primary btn-block"
           onClick={this.logIn.bind(this)}
         >
-          Login
+          Submit
         </button>
       </form>
     );

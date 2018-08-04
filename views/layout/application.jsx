@@ -64,23 +64,47 @@ export default class ApplicationLayout extends React.Component {
 
     var unlogged_header = (
       <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
-        <a className="navbar-brand mr-1" href="/gravity">
-          <img src="/img/logo.png" className="pb-1" alt="sigwo" height="32px" />{" "}
-          Sigwo Technologies
-        </a>
+        <div className="container-fluid">
+          <a className="navbar-brand mr-1" href="/gravity">
+            <img
+              src="/img/logo.png"
+              className="pb-1"
+              alt="sigwo"
+              height="32px"
+            />{" "}
+            Sigwo Technologies
+          </a>
 
-        <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <a className="nav-link" href="/signup">
-              <i className="fa fa-fw fa-user-plus" /> Sign up
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/login">
-              <i className="fa fa-fw fa-sign-in" /> Login
-            </a>
-          </li>
-        </ul>
+          <div className="d-block d-sm-none ml-auto">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <a className="nav-link" href="/signup">
+                  Sign up
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/login">
+                  Login
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="d-none d-sm-block ml-auto">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <a className="nav-link" href="/signup">
+                  <i className="fa fa-fw fa-user-plus" /> Sign up
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/login">
+                  <i className="fa fa-fw fa-sign-in" /> Login
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
     );
 
@@ -131,21 +155,23 @@ export default class ApplicationLayout extends React.Component {
           </li>
         </ul>
         <div id="content-wrapper">
-          <div className="container-fluid">{this.props.children}</div>
-          <footer className="sticky-footer">
-            <div className="container my-auto">
-              <div className="copyright text-center my-auto">
-                <span>Copyright © 2018 YourBrand</span>
+          <div className="container-fluid">
+            {this.props.children}
+            <footer className="sticky-footer">
+              <div className="container my-auto">
+                <div className="copyright text-center my-auto">
+                  <span>Copyright © 2018 YourBrand</span>
+                </div>
               </div>
-            </div>
-          </footer>
+            </footer>
+          </div>
         </div>
       </div>
     );
 
     var unlogged_wrapper = (
-      <div className="wrapper">
-        <div className="content-wrapper">
+      <div id="wrapper">
+        <div id="content-wrapper">
           <div className="container">
             <div>{this.props.children}</div>
             <footer className="fixed-bottom py-3 mt-2 bg-dark text-light">

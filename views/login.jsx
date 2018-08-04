@@ -12,16 +12,11 @@ class LoginPage extends React.Component {
     return (
       <ApplicationLayout data={this.props}>
         <div className="card card-login mx-auto mt-5">
-          <div className="card-header">
+          <div className="card-header bg-dark text-light">
             <h5>Login</h5>
           </div>
           <div className="card-body">
             <div id="login-form" />
-            <div className="text-center">
-              <a className="d-block small mt-3" href="/signup">
-                Register an Account
-              </a>
-            </div>
           </div>
         </div>
       </ApplicationLayout>
