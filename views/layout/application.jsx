@@ -287,14 +287,18 @@ export default class ApplicationLayout extends React.Component {
 
           <script src="/vendor/jquery-easing/jquery.easing.min.js" />
 
-          <script src="/vendor/chart.js/Chart.min.js" />
+          {/*
+            <script src="/vendor/chart.js/Chart.min.js" />
+            I replaced this with react-chartsjs
+            https://github.com/reactjs/react-chartjs
+
+          */}
           <script src="/vendor/datatables/jquery.dataTables.js" />
           <script src="/vendor/datatables/dataTables.bootstrap4.js" />
 
           <script src="/js/sb-admin.min.js" />
 
           <script src="/js/demo/datatables-demo.js" />
-          <script src="/js/demo/chart-area-demo.js" />
 
           <script
             src="/js/bundle.js"

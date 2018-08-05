@@ -63,6 +63,7 @@
     "qrcode": "^0.9.0",
     "react": "^15.6.1",
     "react-alert": "^2.3.0",
+    "react-chartsjs": "^0.1.0",
     "react-dom": "^15.6.1",
     "react-form": "^1.3.0",
     "react-toaster-js": "0.0.1",

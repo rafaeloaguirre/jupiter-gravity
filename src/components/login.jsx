@@ -108,6 +108,7 @@ class LoginForm extends React.Component {
             required="required"
             value={this.state.jup_passphrase}
             onChange={this.handleChange.bind(this)}
+            autoComplete="password"
           />
         </div>
 

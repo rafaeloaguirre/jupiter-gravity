@@ -224,12 +224,10 @@ class SignupForm extends React.Component {
           <br />
           <span>was created for you.</span>
         </div>
-        <div className="text-center">
+        <div className="text-left">
           <div className="form-group">
             <label className="mb-0">First name</label>
-            <p className="mt-0">{this.state.firstname}</p>
             <input
-              type="hidden"
               value={this.state.firstname}
               name="firstname"
               className="form-control"
@@ -239,9 +237,7 @@ class SignupForm extends React.Component {
 
           <div className="form-group">
             <label className="mb-0">Last name</label>
-            <p className="mt-0">{this.state.lastname}</p>
             <input
-              type="hidden"
               value={this.state.lastname}
               name="lastname"
               className="form-control"
@@ -251,12 +247,11 @@ class SignupForm extends React.Component {
 
           <div className="form-group">
             <label className="mb-0">Email</label>
-            <p className="mt-0">{this.state.email}</p>
             <input
-              type="hidden"
               value={this.state.email}
               name="email"
               className="form-control"
+              readOnly
             />
           </div>
 
@@ -327,30 +322,30 @@ class SignupForm extends React.Component {
           <span>{this.state.generated_passphrase}</span>
         </div>
         <div className="form-group">
-          <label htmlFor="inputFirstName">First Name</label>
+          <label htmlFor="firstname">First Name</label>
           <input
             type="text"
-            id="inputFirstName"
             value={this.state.firstname}
-            onChange={this.handleChange.bind(this, "firstname")}
+            name="firstname"
             className="form-control"
+            onChange={this.handleChange.bind(this, "firstname")}
           />
         </div>
         <div className="form-group">
           <label htmlFor="inputLastName">Last Name</label>
           <input
             type="text"
-            id="inputLastName"
+            name="inputLastName"
             value={this.state.lastname}
             onChange={this.handleChange.bind(this, "lastname")}
             className="form-control"
           />
         </div>
         <div className="form-group">
-          <label htmlFor="inputEmail">Email Address</label>
+          <label htmlFor="email">Email Address</label>
           <input
             type="text"
-            id="inputEmail"
+            name="email"
             value={this.state.email}
             onChange={this.handleChange.bind(this, "email")}
             className="form-control"
