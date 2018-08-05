@@ -7,7 +7,8 @@ function getBalance(secret, address, api_key, public_key) {
   const config = {
     headers: {
       user_api_key: api_key,
-      user_public_key: public_key
+      user_public_key: public_key,
+      open: false
     }
   };
 
@@ -97,75 +98,91 @@ class TableComponent extends React.Component {
     const { table } = state;
     const data = table[state.name];
     return (
-      <div className="">
-        <div className="card">
-          <div className="card-header" id={"heading" + this.state.name}>
-            <div className="row mb-0">
-              <div className="col-3 col-xs-12 text-left">
-                <h6>{this.state.name}</h6>
-              </div>
-              <div className="col-3 col-xs-12 text-left">
-                <h6>{this.state.balance}</h6>
-              </div>
-              <div className="col-3 col-xs-12 text-left">
-                <h6 className="text-danger">Low Balance</h6>
-              </div>
-              <div className="text-right">
-                <button
-                  className="btn btn-primary"
-                  type="button"
+      <div className="table-responsive">
+        <table className="table mb-0" style={{ border: "1px solid lightgray" }}>
+          <tbody>
+            <tr>
+              <td style={{ minWidth: "100px" }}>
+                <span>{this.state.name}</span>
+              </td>
+
+              <td>
+                <span>{this.state.balance}</span>
+              </td>
+
+              <td>
+                <span className="text-danger">Low Balance</span>
+              </td>
+              <td className="text-center">
+                <a
+                  className="footer-link text-primary"
+                  href="#"
+                  onClick={() => this.setState({ open: !this.state.open })}
                   data-toggle="collapse"
                   data-target={"#collapse-" + this.state.name}
-                  aria-expanded="false"
                   aria-controls={"collapse-" + this.state.name}
                 >
-                  + more details
-                </button>
+                  {this.state.open ? (
+                    <span className="h5">less details</span>
+                  ) : (
+                    <span className="h5">more details</span>
+                  )}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          className="collapse"
+          id={"collapse-" + this.state.name}
+          in={this.state.open}
+        >
+          <div
+            className="card-body"
+            style={{
+              borderRight: "4px solid lightgray",
+              borderLeft: "4px solid lightgray"
+            }}
+          >
+            <div className="text-left">
+              <div className="form-group">
+                <strong>Address:</strong> {data.address}
               </div>
-              <div className="collapse" id={"collapse-" + this.state.name}>
-                <div className="card-body">
-                  <div className="text-left">
-                    <p>
-                      <strong>Address:</strong> {data.address}
-                    </p>
-                    <p>
-                      <strong>Passphrase:</strong>{" "}
-                      {state.show_passphrase ? (
-                        <span>
-                          {data.passphrase}{" "}
-                          <button
-                            className="btn btn-danger"
-                            onClick={this.showPassphrase.bind(this)}
-                          >
-                            Hide
-                          </button>
-                        </span>
-                      ) : (
-                        <button
-                          className="btn btn-default"
-                          onClick={this.showPassphrase.bind(this)}
-                        >
-                          Show passphrase
-                        </button>
-                      )}
-                    </p>
-                    <p>
-                      <strong>Public Key:</strong> {data.public_key}
-                    </p>
-                    <p>
-                      <strong>Current balance: </strong>
-                      <span
-                        className={
-                          state.low_balance
-                            ? "alert alert-warning"
-                            : "alert alert-info"
-                        }
-                      >
-                        {state.balance / 10 ** 8} JUP
-                      </span>
-                    </p>
-                  </div>
-                </div>
+              <div className="form-group">
+                <strong>Passphrase:</strong>{" "}
+                {state.show_passphrase ? (
+                  <span>
+                    {data.passphrase}{" "}
+                    <button
+                      className="btn btn-danger"
+                      onClick={this.showPassphrase.bind(this)}
+                    >
+                      Hide
+                    </button>
+                  </span>
+                ) : (
+                  <button
+                    className="btn btn-default"
+                    onClick={this.showPassphrase.bind(this)}
+                  >
+                    Show passphrase
+                  </button>
+                )}
+              </div>
+              <div className="form-group">
+                <strong>Public Key:</strong> {data.public_key}
+              </div>
+              <div className="form-group">
+                <strong>Current balance: </strong>
+                <span
+                  className={
+                    state.low_balance
+                      ? "alert alert-warning p-1"
+                      : "alert alert-info p-1"
+                  }
+                >
+                  {state.balance / 10 ** 8} JUP
+                </span>
               </div>
             </div>
           </div>
@@ -351,26 +368,11 @@ class AdminComponent extends React.Component {
                 </h5>
               </div>
               <div className="card-body">
-                <div className="row">
-                  <div className="col-3 col-xs-12">
-                    <h5>Name</h5>
-                  </div>
-                  <div className="col-3 col-xs-12">
-                    <h5>Balance</h5>
-                  </div>
-                  <div className="col-3 col-xs-12">
-                    <h5>Notifications</h5>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">
-                    {state.loading ? (
-                      <p className="text-center alert alert-info">Loading</p>
-                    ) : (
-                      tableList
-                    )}
-                  </div>
-                </div>
+                {state.loading ? (
+                  <p className="text-center alert alert-info">Loading</p>
+                ) : (
+                  tableList
+                )}
               </div>
             </div>
           </div>
