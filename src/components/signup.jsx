@@ -203,7 +203,7 @@ class SignupForm extends React.Component {
 
   update2FA(i_type, event) {
     event.preventDefault();
-    if (i_type == "true") {
+    if (i_type === "true") {
       this.setState({
         enable_two_fa: true
       });
@@ -218,11 +218,9 @@ class SignupForm extends React.Component {
     var new_account_summary = (
       <form action="/signup" method="post" className="text-left">
         <div className="col-8 mx-auto alert alert-primary text-center">
-          <span>Passphrase confirmed and account</span>
+          <span>Passphrase confirmed for account</span>
           <br />
           {this.state.confirmation_message}
-          <br />
-          <span>was created for you.</span>
         </div>
         <div className="text-left">
           <div className="form-group">
@@ -292,7 +290,7 @@ class SignupForm extends React.Component {
             <div className="form-group">
               <lable>
                 Enable two-factor authentication{" "}
-                {this.state.enable_two_fa == true ? (
+                {this.state.enable_two_fa ? (
                   <p className="m-0">Yes</p>
                 ) : (
                   <p className="m-0">No</p>
@@ -360,6 +358,8 @@ class SignupForm extends React.Component {
               id="customRadio1"
               name="customRadio"
               className="custom-control-input"
+              selected={this.state.enable_two_fa}
+              onChange={this.update2FA.bind(this, "true")}
             />
             <label className="custom-control-label" htmlFor="customRadio1">
               <p className="mb-0">Yes</p>
@@ -371,12 +371,15 @@ class SignupForm extends React.Component {
               id="customRadio2"
               name="customRadio"
               className="custom-control-input"
+              selected={!this.state.enable_two_fa}
+              onChange={this.update2FA.bind(this, "no")}
             />
             <label className="custom-control-label" htmlFor="customRadio2">
               <p className="mb-0">No</p>
             </label>
           </div>
         </div>
+        {this.state.enable_two_fa ? "Enabled" : "Disabled"}
         {this.state.jup_account_created == true ? (
           <div className="form-group">
             <button

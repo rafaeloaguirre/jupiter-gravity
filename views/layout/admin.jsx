@@ -15,7 +15,7 @@ export default class ApplicationLayout extends React.Component {
     );
 
     var logged_header = (
-      <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
+      <nav className="navbar navbar-expand navbar-dark bg-custom-primary static-top">
         <a className="navbar-brand mr-1" href="/gravity">
           <i className="fa fa-fw fa-globe" /> YourBrand
         </a>
@@ -63,7 +63,7 @@ export default class ApplicationLayout extends React.Component {
     );
 
     var unlogged_header = (
-      <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
+      <nav className="navbar navbar-expand navbar-dark bg-custom-primary static-top">
         <div className="container-fluid">
           <a className="navbar-brand mr-1" href="/gravity">
             <img
@@ -119,16 +119,14 @@ export default class ApplicationLayout extends React.Component {
               </a>
             </div>
           </div>
-          <li className="nav-item active">
+          <li className="nav-item">
             <a className="nav-link" href="/">
-              <i className="fa fa-fw fa-dashboard" />
-              <span>App Summary</span>
+              <i className="fa fa-fw fa-dashboard" /> App Summary
             </a>
           </li>
-          <li className="nav-item active">
+          <li className="nav-item">
             <a className="nav-link" href="/admin/tables">
-              <i className="fa fa-fw fa-edit" />
-              <span>Tables</span>
+              <i className="fa fa-fw fa-edit" /> Tables
             </a>
           </li>
         </ul>

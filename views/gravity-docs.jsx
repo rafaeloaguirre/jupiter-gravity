@@ -50,7 +50,7 @@ class GravityDocs extends React.Component{
                   <div className="col-sm-8 mt-3">
                     <section className="" id="gettingStarted">
                       <div className="divider my-3"></div>
-                      <div className="row bg-dark text-light p-3 pt-4">
+                      <div className="row bg-custom-primary text-light p-3 pt-4">
                           <div className="col-sm-12 ">
                               <h3 className="">Download the compressed zip file</h3>
                               <hr />

@@ -32,16 +32,12 @@ class GravityPage extends React.Component {
   render() {
     return (
       <ApplicationLayout data={this.props}>
-        <div className="divider my-5" />
-
-        <h1 className="text-center">Welcome to your Gravity App</h1>
-
-        <div className="divider my-5" />
+        <div className="page-title">Welcome to your Gravity App</div>
 
         <div className="row">
           <div className="col-md-6 mx-auto col-xs-12">
             <div className="card">
-              <div className="card-header">
+              <div className="card-header bg-custom-primary text-light">
                 <h5>Application Status</h5>
               </div>
               <div className="card-body">

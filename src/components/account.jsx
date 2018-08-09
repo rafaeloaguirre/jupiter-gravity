@@ -95,37 +95,35 @@ class AccountComponent extends React.Component {
   render() {
     return (
       <div className="">
-        <h1 className="page-title text-center">My Account</h1>
+        <div className="page-title">My Account</div>
         <div className="row">
           <div className="card card-register mx-auto my-4">
-            <h3 className="card-header bg-dark text-white">
+            <h3 className="card-header bg-custom-primary text-white">
               Account information
             </h3>
             {this.state.account_editing_mode == true ? (
               <form className="card-body">
                 <div className="form-row">
-                  <div className="form-group">
-                    <div className="col-md-6 col-lg-6 p-3">
-                      <label htmlFor="inputFirstName">First Name</label>
+                  <div className="form-group col-md-6">
+                    <label htmlFor="inputFirstName">First Name</label>
 
-                      <input
-                        value={this.state.firstname}
-                        onChange={this.handleChange.bind(this, "firstname")}
-                        type="name"
-                        className="form-control"
-                        id="inputFirstName"
-                      />
-                    </div>
-                    <div className="col-md-6 col-lg-6 p-3">
-                      <label htmlFor="inputLastName">Last Name</label>
-                      <input
-                        value={this.state.lastname}
-                        onChange={this.handleChange.bind(this, "lastname")}
-                        type="name"
-                        className="form-control"
-                        id="inputLastName"
-                      />
-                    </div>
+                    <input
+                      value={this.state.firstname}
+                      onChange={this.handleChange.bind(this, "firstname")}
+                      type="name"
+                      className="form-control"
+                      id="inputFirstName"
+                    />
+                  </div>
+                  <div className="form-group col-md-6">
+                    <label htmlFor="inputLastName">Last Name</label>
+                    <input
+                      value={this.state.lastname}
+                      onChange={this.handleChange.bind(this, "lastname")}
+                      type="name"
+                      className="form-control"
+                      id="inputLastName"
+                    />
                   </div>
                 </div>
                 <div className="form-group">
@@ -138,7 +136,7 @@ class AccountComponent extends React.Component {
                     id="inputEmailAddress"
                   />
                 </div>
-                <div className="form-row">
+                <div className="form-row mt-2">
                   <div className="col">
                     <button
                       type="button"
@@ -196,7 +194,7 @@ class AccountComponent extends React.Component {
                     disabled
                   />
                 </div>
-                <div className="form-row">
+                <div className="form-row mt-2">
                   <div className="col">
                     <button
                       type="button"

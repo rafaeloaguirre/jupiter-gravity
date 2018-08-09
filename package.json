@@ -14,7 +14,8 @@
     "gravity:app:balance": "node -e \"require(process.env.PWD+'/config/gravity.js').getBalance();\"",
     "gravity:app:scaffold": "plop scaffold",
     "gravity:app:model": "plop model",
-    "gravity:app:page": "plop page"
+    "gravity:app:page": "plop page",
+    "dev": "nodemon server.js && webpack -w"
   },
   "authors": [
     {

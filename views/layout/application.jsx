@@ -15,7 +15,7 @@ export default class ApplicationLayout extends React.Component {
     );
 
     var logged_header = (
-      <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
+      <nav className="navbar navbar-expand navbar-dark bg-custom-primary static-top">
         <a className="navbar-brand mr-1" href="/gravity">
           <i className="fa fa-fw fa-globe" /> YourBrand
         </a>
@@ -63,7 +63,7 @@ export default class ApplicationLayout extends React.Component {
     );
 
     var unlogged_header = (
-      <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
+      <nav className="navbar navbar-expand navbar-dark bg-custom-primary static-top">
         <div className="container-fluid">
           <a className="navbar-brand mr-1" href="/gravity">
             <img
@@ -109,7 +109,7 @@ export default class ApplicationLayout extends React.Component {
     );
 
     var gravity_unlogged_header = (
-      <nav className="navbar navbar-expand navbar-dark bg-dark static-top">
+      <nav className="navbar navbar-expand navbar-dark bg-custom-primary static-top">
         <a className="navbar-brand mr-1" href="/gravity">
           <img src="/img/logo.png" className="pb-1" alt="sigwo" height="32px" />{" "}
           Sigwo Technologies
@@ -148,23 +148,14 @@ export default class ApplicationLayout extends React.Component {
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/profile">
+            <a className="nav-link" href="/account">
               <i className="fa fa-fw fa-edit" />
               <span>My Profile</span>
             </a>
           </li>
         </ul>
         <div id="content-wrapper">
-          <div className="container-fluid">
-            {this.props.children}
-            <footer className="sticky-footer">
-              <div className="container my-auto">
-                <div className="copyright text-center my-auto">
-                  <span>Copyright © 2018 YourBrand</span>
-                </div>
-              </div>
-            </footer>
-          </div>
+          <div className="container-fluid">{this.props.children}</div>
         </div>
       </div>
     );
@@ -174,7 +165,7 @@ export default class ApplicationLayout extends React.Component {
         <div id="content-wrapper">
           <div className="container">
             <div>{this.props.children}</div>
-            <footer className="fixed-bottom py-3 mt-2 bg-dark text-light">
+            <footer className="fixed-bottom py-3 mt-2 bg-custom-primary text-light">
               <div className="container-fluid">
                 <div className="text-center">
                   <small>Copyright © Sigwo Technologies 2018</small>

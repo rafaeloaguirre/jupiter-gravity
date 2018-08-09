@@ -54,6 +54,30 @@ body {
   height: 100%;
 }
 
+.btn-primary {
+  background-color: #26313d;
+  border: none;
+  outline: none;
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background-color: #12181e;
+  border: none;
+  outline: none;
+}
+
+.bg-custom-primary {
+  background-color: #26313d;
+}
+
+.page-title {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 28px;
+}
+
 #wrapper {
   display: flex;
 }
@@ -68,6 +92,7 @@ body {
 body.fixed-nav #content-wrapper {
   margin-top: 56px;
   padding-left: 90px;
+  padding-bottom: 0px;
 }
 
 body.fixed-nav.sidebar-toggled #content-wrapper {

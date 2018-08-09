@@ -138,7 +138,7 @@ class TableComponent extends React.Component {
           in={this.state.open}
         >
           <div
-            className="card-body"
+            className="card-body w-100"
             style={{
               borderRight: "4px solid lightgray",
               borderLeft: "4px solid lightgray"
@@ -326,54 +326,57 @@ class AdminComponent extends React.Component {
 
     return (
       <div className="">
-        <div className="card card-plain p-4 my-3">
-          <div className="row">
-            <div className="col-12">
-              <h2 className="text-center my-4">App Summary</h2>
+        <div className="page-title">App Summary</div>
+        <div className="row">
+          <div className="col-xs-12 col-md-6">
+            <div className="card card-plain">
+              <div className="card-body">
+                <strong>App Address:</strong>
+                <br />
+                <span className="bg-warning rounded p-1">
+                  {props.user.record.account}
+                </span>
+              </div>
             </div>
-            <div className="col-12 col-md-6 my-4">
-              <h4>App Address:</h4>
-              <span className="bg-warning rounded h4 p-1">
-                {props.user.record.account}
-              </span>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <div className="card card-plain">
+              <div className="card-body text-right">
+                <p>
+                  <strong>Current balance: </strong>
+                  {state.balances && state.balances.balance
+                    ? state.balances.balance / 10 ** 8
+                    : 0}{" "}
+                  JUP
+                  <br />
+                  <strong>Required app balance: </strong>
+                  {state.balances && state.balances.minAppBalanceAmount
+                    ? state.balances.minAppBalanceAmount / 10 ** 8
+                    : 0}{" "}
+                  JUP
+                </p>
+              </div>
             </div>
-            <div className="col-12 col-md-6 text-right my-auto">
-              <p>
-                <strong>Current balance: </strong>
-                {state.balances && state.balances.balance
-                  ? state.balances.balance / 10 ** 8
-                  : 0}{" "}
-                JUP<br />
-                <strong>Required app balance: </strong>
-                {state.balances && state.balances.minAppBalanceAmount
-                  ? state.balances.minAppBalanceAmount / 10 ** 8
+          </div>
+        </div>
+        <div className="col-12">
+          <div className="card">
+            <div className="card-header bg-custom-primary text-light">
+              <h4>Current App Tables</h4>
+              <p className="mb-0">
+                <strong>Required Table balance: </strong>
+                {state.balances && state.balances.minTableBalanceAmount
+                  ? state.balances.minTableBalanceAmount / 10 ** 8
                   : 0}{" "}
                 JUP
               </p>
             </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-12 col-md-12 col-xs-12">
-            <div className="card mt-2 mb-5">
-              <div className="card-header">
-                <h3>Current App Tables</h3>
-                <h5>
-                  <strong>Required Table balance: </strong>
-                  {state.balances && state.balances.minTableBalanceAmount
-                    ? state.balances.minTableBalanceAmount / 10 ** 8
-                    : 0}{" "}
-                  JUP
-                </h5>
-              </div>
-              <div className="card-body">
-                {state.loading ? (
-                  <p className="text-center alert alert-info">Loading</p>
-                ) : (
-                  tableList
-                )}
-              </div>
+            <div className="card-body">
+              {state.loading ? (
+                <p className="text-center alert alert-info">Loading</p>
+              ) : (
+                tableList
+              )}
             </div>
           </div>
         </div>

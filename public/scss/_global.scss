@@ -9,6 +9,30 @@ body {
   height: 100%;
 }
 
+.btn-primary {
+  background-color: $custom-primary;
+  border: none;
+  outline: none;
+  &:hover,
+  &:active {
+    background-color: darken($custom-primary, 10);
+    border: none;
+    outline: none;
+  }
+}
+
+.bg-custom-primary {
+  background-color: $custom-primary;
+}
+
+.page-title {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 28px;
+}
+
 #wrapper {
   display: flex;
   #content-wrapper {
@@ -23,6 +47,7 @@ body.fixed-nav {
   #content-wrapper {
     margin-top: $navbar-base-height;
     padding-left: $sidebar-collapsed-width;
+    padding-bottom: 0px;
   }
   &.sidebar-toggled {
     #content-wrapper {
