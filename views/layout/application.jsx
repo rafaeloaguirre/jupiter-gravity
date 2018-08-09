@@ -209,12 +209,8 @@ export default class ApplicationLayout extends React.Component {
             rel="stylesheet"
           />
 
-          <link
-            href="/vendor/datatables/dataTables.bootstrap4.css"
-            rel="stylesheet"
-          />
-
           <link href="/css/sb-admin.css" rel="stylesheet" />
+          <link href="/css/react-table.css" rel="stylesheet" />
         </head>
         <body>
           <span id="toastrMessages" />
@@ -276,7 +272,6 @@ export default class ApplicationLayout extends React.Component {
           <script src="/vendor/jquery/jquery.min.js" />
           <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" />
 
-          <script src="/vendor/jquery-easing/jquery.easing.min.js" />
 
           {/*
             <script src="/vendor/chart.js/Chart.min.js" />
@@ -284,12 +279,9 @@ export default class ApplicationLayout extends React.Component {
             https://github.com/reactjs/react-chartjs
 
           */}
-          <script src="/vendor/datatables/jquery.dataTables.js" />
-          <script src="/vendor/datatables/dataTables.bootstrap4.js" />
 
           <script src="/js/sb-admin.min.js" />
 
-          <script src="/js/demo/datatables-demo.js" />
 
           <script
             src="/js/bundle.js"

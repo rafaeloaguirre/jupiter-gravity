@@ -3,6 +3,8 @@ import { render } from "react-dom";
 import axios from "axios";
 import toastr from "toastr";
 
+import MyTable from "./ReactTable/MyTable.jsx";
+
 function getBalance(secret, address, api_key, public_key) {
   const config = {
     headers: {
@@ -331,8 +333,7 @@ class AdminComponent extends React.Component {
           <div className="col-xs-12 col-md-6">
             <div className="card card-plain">
               <div className="card-body">
-                <strong>App Address:</strong>
-                <br />
+                <h6>App Address:</h6>
                 <span className="bg-warning rounded p-1">
                   {props.user.record.account}
                 </span>
@@ -380,6 +381,7 @@ class AdminComponent extends React.Component {
             </div>
           </div>
         </div>
+        <MyTable />
       </div>
     );
   }

@@ -168,18 +168,21 @@ export default class ApplicationLayout extends React.Component {
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" />
           <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" />
           <link
-            href="https://fonts.googleapis.com/css?family=Lato"
-            rel="stylesheet"
-          />
-          <link
             href="/vendor/font-awesome/css/font-awesome.min.css"
             rel="stylesheet"
           />
           <link
-            href="/vendor/datatables/dataTables.bootstrap4.css"
+            href="/vendor/bootstrap/css/bootstrap.min.css"
             rel="stylesheet"
           />
+
+          <link
+            href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i"
+            rel="stylesheet"
+          />
+
           <link href="/css/sb-admin.css" rel="stylesheet" />
+          <link href="/css/react-table.css" rel="stylesheet" />
         </head>
         <body>
           <span id="toastrMessages" />
@@ -240,20 +243,14 @@ export default class ApplicationLayout extends React.Component {
           <script src="/vendor/jquery/jquery.min.js" />
           <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js" />
 
-          <script src="/vendor/jquery-easing/jquery.easing.min.js" />
-
           {/*
             <script src="/vendor/chart.js/Chart.min.js" />
             I replaced this with react-chartsjs
             https://github.com/reactjs/react-chartjs
 
           */}
-          <script src="/vendor/datatables/jquery.dataTables.js" />
-          <script src="/vendor/datatables/dataTables.bootstrap4.js" />
 
           <script src="/js/sb-admin.min.js" />
-
-          <script src="/js/demo/datatables-demo.js" />
           <script
             src="/js/bundle.js"
             data-props={JSON.stringify(this.props.data)}
